@@ -1,5 +1,5 @@
 /**
-*   Description: Controller file for forgot pass
+*   Description: Controller file, will autorize users to loggin, only for Login purpose  
 **/
 
 //  chkSapId function controller
