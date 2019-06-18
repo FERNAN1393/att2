@@ -5,7 +5,7 @@
 import React from 'react';
 // Redux and actions dependencies
 import { connect } from 'react-redux';
-import {forgotPass} from './../redux/actions/action.forgotPass';
+import {checksapIdAction} from './../redux/actions/action.forgotPass';
 // loading image
 import loading_image from './../resources/img/blue_loading.gif'; // Tell Webpack this JS file uses this image
 // Reactstrap components
@@ -17,7 +17,8 @@ class ForgotPass extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sapId: '12345678'
+      sapId: '12345678',
+      stage: 1
     };
   }
   
@@ -30,13 +31,11 @@ class ForgotPass extends React.Component {
   event.preventDefault();
   }
   
-  toggle = () => {
-    console.log("first print")
-    console.log(this.props.forgotObj)
-    console.log("after hitting accion")
-    console.log(this.props.forgotPass(this.state).payload)
-    console.log("new state")
-    console.log(this.props.forgotObj)
+  toggle = async () => {
+    console.log("first print",this.props.forgotObj)
+    console.log("after hitting accion, printing payload", 
+      await this.props.checksapIdAction(this.state.sapId).payload)
+    console.log("new redux state", this.props.forgotObj)
   }
   
   render() {
@@ -48,7 +47,7 @@ class ForgotPass extends React.Component {
               Forgot Password?
             </h1>
             <p>
-              No problem! Enter your SapId ypu use to sign in. Next aswers your security questions.
+              No problem! Enter your SapId you use to sign in. Next aswers your security questions.
             </p>
             <h5>
               <b>SapId</b>
@@ -56,7 +55,7 @@ class ForgotPass extends React.Component {
             
           </ModalBody>
           <ModalFooter>
-            <Button color="secondary"  onClick={this.toggle}>Cancel</Button>
+            <Button color="secondary"  onClick={()=>this.toggle()}>Cancel</Button>
           </ModalFooter>
       </div>
     );
@@ -65,13 +64,13 @@ class ForgotPass extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-      // passObj containt first SapId then questions
-      forgotObj: state.forgotObj,
+      // forgotObj containt first SapId then questions
+      forgotObj: state.forgotPassReducer
     };
 }
 
 const mapDispatchToProps = ({
-    forgotPass,
+    checksapIdAction,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForgotPass);

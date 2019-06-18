@@ -2,12 +2,18 @@
 *   Description: Controller file for forgot pass
 **/
 
+const output = {
+    
+}
+
+
 //  chkSapId function controller
 //  input:  sapId
-//  output: Security questions
+//  output: Object with questions
 export const chkSapId = passObj => {
-    console.log("im in controller", passObj)
-    if( passObj.sapId === "12345678" )
-        return true;
+    if( passObj == "12345678" )
+        return {
+            data: "chingo de data",
+        };
     return false;
 };

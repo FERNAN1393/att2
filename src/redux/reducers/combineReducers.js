@@ -3,8 +3,8 @@
 **/
 
 import { combineReducers  } from 'redux';
-import forgotPass from './reducer.forgotPass';
+import forgotPassReducer from './reducer.forgotPass';
 
 export default combineReducers({
-  forgotPass,
+  forgotPassReducer,
 });

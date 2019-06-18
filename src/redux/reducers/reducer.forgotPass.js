@@ -1,17 +1,37 @@
 /**
 *   Description: Reducers file for ForgotPass actions
 **/
+// Constants for actions
+import {
+  GETTING_REQUEST,
+  REQUEST_SAPID_SUCCESS,
+  REQUEST_SAPID_ERROR
+} from './../../constants/reduxActions';
 
-import { FORGOT_PASS_CHK_SAPID } from './../../constants/reduxActions';
+const initialState = {};
 
-export default function userReducer(state = {}, action) {
+export default function forgotPassReducer(state, action) {
+    console.log("raulivan",action.type)
     switch (action.type) {
-        case FORGOT_PASS_CHK_SAPID:
-            return {
+        case GETTING_REQUEST:
+            state = {
                 ...state,
-                forgotObj: action.payload,
+                ... action.payload,
             };
+            return state
+        case REQUEST_SAPID_SUCCESS:
+            state = {
+                ...state,
+                ... action.payload,
+            };
+            return state
+        case REQUEST_SAPID_ERROR:
+            state = {
+                ...state,
+                ... action.payload,
+            };
+            return state
         default:
-          return state;
+          return null;
     }
 }

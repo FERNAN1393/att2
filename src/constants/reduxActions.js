@@ -2,4 +2,8 @@
 *   Description: Constants for Redux Actions
 **/
 
-export const FORGOT_PASS_CHK_SAPID = "CHK_SAPID";
+//  --------------------            ForgotPass              --------------------
+
+export const GETTING_REQUEST        = "GETTING_REQUEST";
+export const REQUEST_SAPID_SUCCESS  = "REQUEST_SAPID_SUCCESS";
+export const REQUEST_SAPID_ERROR    = "REQUEST_SAPID_ERROR";
