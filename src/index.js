@@ -7,6 +7,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 // Bootstrap resource
 import './resources/bootstrap/bootstrap.min.css';
+// CSS files
+import './resources/css/index.css';
 // Imports for redux and redux-thunk
 import { createStore, applyMiddleware } from 'redux';
 import combineReducers from './redux/reducers/combineReducers';
