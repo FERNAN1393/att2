@@ -1,10 +1,12 @@
 /**
 *   Description: Main app Container. Routes for app.
 **/
+
 import React from 'react';
 import * as firebase from "firebase";
-//import Admin from "firebase-admin";
+import { Route, Switch } from 'react-router-dom';
 import { FirebaseCon } from "./constants/Collections";
+import { SignInForm } from './containers';
 
 class App extends React.Component{
    constructor(props) {
@@ -18,16 +20,20 @@ class App extends React.Component{
       const res = await SignIn("javier", "123");
       alert (res.name);
     }
-    
-    componentDidMount(){
-      this.Login();
-    }*/
+    */
   
   render(){
     return (
-    <div>
-          Learn React
-    </div>
+        <div className="App">
+          <div className="App__Form" >
+          <Switch>
+            <Route exact path="/" render={(props) => <SignInForm {...props}/>}  />
+            <Route exact path="/login" render={(props) => <SignInForm {...props}/>}  />    
+          </Switch> 
+            <div className="Layout_Template">
+            </div>
+          </div>
+        </div>
     );
   }
 }
