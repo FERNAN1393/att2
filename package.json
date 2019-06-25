@@ -6,6 +6,7 @@
     "feather-icons-react": "^0.3.2",
     "firebase": "^5.9.2",
     "firebase-admin": "^8.0.0",
+    "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -36,5 +37,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-export-default-from": "^7.2.0"
   }
 }

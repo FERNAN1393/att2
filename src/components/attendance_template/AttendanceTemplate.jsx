@@ -4,7 +4,7 @@
  */
 //React libraries
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink as Link, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Navbar,
@@ -18,6 +18,8 @@ import {
   DropdownItem } from 'reactstrap';
 //import { Redirect } from 'react-router';
 import FeatherIcon from 'feather-icons-react';
+//Attendance files
+import Calendar from '../../containers/calendar/Calendar';
 //CSS files
 import '../../resources/css/attendance_template/attendanceTemplate.css';
 
@@ -34,27 +36,15 @@ class AttendanceTemplate extends Component {
 
   componentDidMount = () => {
     if (!this.props.user) {
-      //Redirect
+      //Redirect to sign in
       console.log('User has to log in');
     }
-    this.setState({
-      selectedSidebarOption: (this.props.user.role === '1') ? 
-        'upload-link' : 'calendar-link'
-    });
   }
   
   handleLogOut = () => {
     this.setState({
       user: null,
       selectedSidebarOption: ''
-    });
-  }
-
-  selectSidebarOption = event => {
-    event.preventDefault();    
-    const name = event.target.name;
-    this.setState({
-      selectedSidebarOption: name
     });
   }
       
@@ -68,25 +58,23 @@ class AttendanceTemplate extends Component {
           <Navbar className="shadow p-0 attendance-template-navbar" color="dark" dark expand="lg">
             <NavbarBrand className="col-sm-3 col-md-2 mr-0" href="#">Attendance</NavbarBrand>
             <Nav className="ml-auto attendance-template-navbar-menu" navbar>
-              <NavItem>
-                <UncontrolledDropdown nav>
-                  <DropdownToggle nav caret>
-                    <span style={{color: '#fff'}}>{employeeName}</span>
-                  </DropdownToggle>
-                  <DropdownMenu right>
-                    <DropdownItem>
-                      <NavLink 
-                        tag={Link} 
-                        to="/" 
-                        style={{color: '#000'}} 
-                        onClick={this.handleLogOut}
-                      >
-                        Sign out
-                      </NavLink>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </UncontrolledDropdown>
-              </NavItem>
+              <UncontrolledDropdown nav>
+                <DropdownToggle nav caret>
+                  <span style={{color: '#fff'}}>{employeeName}</span>
+                </DropdownToggle>
+                <DropdownMenu right>
+                  <DropdownItem>
+                    <NavLink 
+                      tag={Link} 
+                      to="/" 
+                      style={{color: '#000'}} 
+                      onClick={this.handleLogOut}
+                    >
+                      Sign out
+                    </NavLink>
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
             </Nav>
           </Navbar>
           <div>
@@ -96,10 +84,7 @@ class AttendanceTemplate extends Component {
                   <NavItem>
                     <NavLink 
                       tag={Link} 
-                      to="/" 
-                      name="upload-link"
-                      onClick={this.selectSidebarOption}
-                      className={this.state.selectedSidebarOption === 'upload-link' ? 'active' : ''}
+                      to="/upload"
                     >
                       <span><FeatherIcon icon="upload-cloud"/></span> 
                       Upload File
@@ -108,10 +93,7 @@ class AttendanceTemplate extends Component {
                   <NavItem>
                     <NavLink 
                       tag={Link} 
-                      to="/" 
-                      name="finance-link"
-                      onClick={this.selectSidebarOption}
-                      className={this.state.selectedSidebarOption === 'finance-link' ? 'active' : ''}
+                      to="/finances" 
                     >
                       <span><FeatherIcon icon="download-cloud"/></span> 
                       Finance Files
@@ -124,10 +106,7 @@ class AttendanceTemplate extends Component {
               <NavItem>
                 <NavLink 
                   tag={Link} 
-                  to="/" 
-                  name="calendar-link"
-                  onClick={this.selectSidebarOption}
-                  className={this.state.selectedSidebarOption === 'calendar-link' ? 'active' : ''}
+                  to="/calendar" 
                 >
                   <span><FeatherIcon icon="calendar"/></span> 
                   Shift Calendar
@@ -138,10 +117,7 @@ class AttendanceTemplate extends Component {
                   <NavItem>
                     <NavLink 
                       tag={Link} 
-                      to="/" 
-                      name="bookmark-link"
-                      onClick={this.selectSidebarOption}
-                      className={this.state.selectedSidebarOption === 'bookmark-link' ? 'active' : ''}
+                      to="/holidays"
                     >
                       <span><FeatherIcon icon="bookmark"/></span> 
                       Holidays
@@ -150,10 +126,7 @@ class AttendanceTemplate extends Component {
                   <NavItem>
                     <NavLink 
                       tag={Link} 
-                      to="/" 
-                      name="employees-link"
-                      onClick={this.selectSidebarOption}
-                      className={this.state.selectedSidebarOption === 'employees-link' ? 'active' : ''}
+                      to="/employees"
                     >
                       <span><FeatherIcon icon="users"/></span> 
                       Employees
@@ -166,10 +139,8 @@ class AttendanceTemplate extends Component {
               <NavItem className="fixed-bottom">
                 <NavLink 
                   tag={Link} 
-                  to="/" 
+                  to="/profile" 
                   name="profile-link"
-                  onClick={this.selectSidebarOption}
-                  className={this.state.selectedSidebarOption === 'profile-link' ? 'active' : ''}
                 >
                   <span><FeatherIcon icon="settings"/></span> 
                   Edit Profile
@@ -177,8 +148,9 @@ class AttendanceTemplate extends Component {
               </NavItem>
             </Nav>
             <main className="col-md-10">
-              <h1>A title</h1>
-              <p>This is some long text, prepare for it; jhgsadhfkjsagfdhs dhdhfg sahdghg djh ah fdjhsa bfdha bfdhbs jfb dskjfbsakj bfas fhs vdfas dha jha dfhabd fkhdsa fha fdha jha dkjha vjha dh afdha fhavdsfa vfjhbadbhfd a.</p>
+              <Route 
+                {...this.props} render={() => React.createElement(this.props.component)}
+              />
             </main>
           </div>
         </div>

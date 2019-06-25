@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route} from 'react-router-dom';
 import { FirebaseCon } from "./constants/Collections";
 
 import AttendanceTemplate from './components/attendance_template/AttendanceTemplate';
+import Calendar from './containers/calendar/Calendar';
 
 const admin = {
   projectName: 'Attendance ',
@@ -69,10 +70,11 @@ class App extends React.Component{
   render = () => {
     return (
       <Router>
-        <Route 
+        <AttendanceTemplate 
           exact 
-          path="/" 
-          render={(props) => <AttendanceTemplate {...props} user={this.state.user} />}  
+          path="/calendar" 
+          user={this.state.user} 
+          component={Calendar} 
         />
       </Router>
     );
