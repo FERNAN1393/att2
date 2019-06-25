@@ -2,6 +2,7 @@
 *   Description: Controller file, will autorize users to loggin, only for Login purpose  
 **/
 import * as firebase from "firebase";
+
 import {USER_COLLECTION} from "../constants/Collections.js"
 //  SingIn function controller
 //  input:  email, password
@@ -19,7 +20,5 @@ export function SignIn (email, pass) {
         }
       }
     return userLogged;
-  }).catch(err =>{
-      throw err;
-  });
+  })
 }
