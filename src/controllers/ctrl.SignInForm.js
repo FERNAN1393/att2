@@ -10,7 +10,6 @@ export function SignIn (email, pass) {
   const db = firebase.firestore();
   const fraterUsers = db.collection(USER_COLLECTION);
   return fraterUsers.where("email","==",email).where("password","==",pass).get().then(function(user) {
-    debugger; 
     let userLogged = null;
     if(user !== undefined && user.docs.length > 0){
         userLogged = {
