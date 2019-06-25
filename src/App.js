@@ -4,12 +4,16 @@
 
 import React from 'react';
 import * as firebase from "firebase";
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 //import Admin from "firebase-admin";
 import { FirebaseCon } from "./constants/Collections";
 import { SignInForm } from './containers';
+import { connect } from 'react-redux';
 
 import AttendanceTemplate from './components/attendance_template/AttendanceTemplate';
+
+
+const mapStateToProps = ({user}) => ({user});
 
 const admin = {
   projectName: 'Attendance ',
@@ -47,7 +51,8 @@ const user = {
   status: 'active'
 };
 
-class App extends React.Component{
+
+class _App extends React.Component{
    constructor(props) {
         super(props); 
         firebase.initializeApp(FirebaseCon);
@@ -60,12 +65,24 @@ class App extends React.Component{
     }
   
   render = () => {
+    const { user: loggedUser } = this.props; 
+    console.log(this.props);
     return (
         <div className="App">
           <div className="App__Form" >
-          <Switch>
-            <Route  exact  path="/" render={(props) => <AttendanceTemplate {...props} user={this.state.user} />} />
-            <Route exact path="/login" render={(props) => <SignInForm {...props}/>}  />    
+          <Switch >
+       
+          {!loggedUser &&  <Route path='/login' component={SignInForm}  /> }
+          {!loggedUser && <Redirect to='/login' /> }
+          
+          <Redirect exact from='/login' to='/' /> 
+
+          <Route render={(props) => (
+          <Switch {...props}>
+             <Route  exact  path="/" render={(props) => <AttendanceTemplate {...props} user={this.state.user} />} />
+          </Switch>
+          )}/> 
+         
           </Switch> 
             <div className="Layout_Template">
             </div>
@@ -75,4 +92,4 @@ class App extends React.Component{
   }
 }
 
-export default App;
+export const App = connect(mapStateToProps)(_App);

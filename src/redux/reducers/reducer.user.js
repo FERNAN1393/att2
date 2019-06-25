@@ -4,10 +4,10 @@
 // Constants for actions
 import { USER_LOGGED } from './../../constants/reduxActions';
   
-export const  userReducer = (state = {}, action) => {
+export const  userReducer = (state = null , action) => {
       switch (action.type) {
           case USER_LOGGED:
-                return { ...state,...action.user, };
+                return { ...(state|| {}),...action.user, };
           default:
             return state;
       }
