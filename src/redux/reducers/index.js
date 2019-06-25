@@ -4,7 +4,9 @@
 
 import { combineReducers  } from 'redux';
 import forgotPassReducer from './reducer.forgotPass';
+import { userReducer } from './reducer.user';
 
-export default combineReducers({
+export const rootReducer = combineReducers({
   forgotPassReducer,
+  user: userReducer
 });

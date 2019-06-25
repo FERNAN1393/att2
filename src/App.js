@@ -1,16 +1,21 @@
 /**
 *   Description: Main app Container. Routes for app.
 **/
+
 import React from 'react';
 import * as firebase from "firebase";
-import { BrowserRouter as Router, Route} from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 //import Admin from "firebase-admin";
 import { FirebaseCon } from "./constants/Collections";
+import { SignInForm } from './containers';
+import { connect } from 'react-redux';
 
 import AttendanceTemplate from './components/attendance_template/AttendanceTemplate';
 import Calendar from './containers/calendar/Calendar';
 
-const admin = {
+const mapStateToProps = ({user}) => ({user});
+
+/*const admin = {
   projectName: 'Attendance ',
   projectCode: '001',
   reportingManager: '12345678',
@@ -44,41 +49,41 @@ const user = {
   role: '2',
   client: 'USAA',
   status: 'active'
-};
+};*/
 
-class App extends React.Component{
+class _App extends React.Component{
    constructor(props) {
         super(props); 
         firebase.initializeApp(FirebaseCon);
       
-        this.state = {
+        /*this.state = {
           username: '',
           password: '',
           user: admin
-        };
+        };*/
     }
-    /*Funcion demo de como usar async con firebase
-    Login = async ()=>{
-      const res = await SignIn("javier", "123");
-      alert (res.name);
-    }
-    
-    componentDidMount(){
-      this.Login();
-    }*/
   
   render = () => {
+    const { user: loggedUser } = this.props; 
+    console.log(this.props);
     return (
-      <Router>
-        <AttendanceTemplate 
-          exact 
-          path="/calendar" 
-          user={this.state.user} 
-          component={Calendar} 
-        />
-      </Router>
+      <div className="App">
+        <div className="App__Form" >
+          <Switch >
+       
+            {!loggedUser && <Route path='/login' component={SignInForm}  /> }
+            {!loggedUser && <Redirect to='/login' /> }
+            
+            <Redirect exact from='/login' to='/' /> 
+    
+            <Route  exact  path="/calendar" render={(props) => <AttendanceTemplate {...props} user={loggedUser} component={Calendar}  />} />
+            <Route  exact  path="/" render={(props) => <AttendanceTemplate {...props} user={loggedUser} />} />
+         
+          </Switch>
+        </div>
+      </div>
     );
   }
 }
 
-export default App;
+export const App = connect(mapStateToProps)(_App);

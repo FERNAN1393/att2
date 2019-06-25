@@ -34,11 +34,9 @@ class AttendanceTemplate extends Component {
     };
   }
 
-  componentDidMount = () => {
-    if (!this.props.user) {
-      //Redirect to sign in
-      console.log('User has to log in');
-    }
+
+  componentWillMount = () => {
+    console.log(this.props.user);
   }
   
   handleLogOut = () => {
@@ -149,7 +147,7 @@ class AttendanceTemplate extends Component {
             </Nav>
             <main className="col-md-10">
               <Route 
-                {...this.props} render={() => React.createElement(this.props.component)}
+                {...this.props} component={this.props.component}
               />
             </main>
           </div>
