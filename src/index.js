@@ -1,8 +1,9 @@
 /*
 *   Description: Set redux and render application.
 */
-import './resources/bootstrap/bootstrap.min.css';
-import './themes/index.css'
+// CSS files
+import './resources/css/index.css';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
