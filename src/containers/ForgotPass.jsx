@@ -200,13 +200,13 @@ class ForgotPass extends React.Component {
         <p>
           Password
         </p>
-        <Input name="pass1" 
+        <Input name="pass1" type="password" 
           placeholder="Enter first password here!" onChange={evt=>{this.handleChange(evt)}}
         />
         <p>
           Confirm password
         </p>
-        <Input name="pass2" 
+        <Input name="pass2" type="password"
           placeholder="Enter second password here!" onChange={evt=>{this.handleChange(evt)}}
         />
         {this.state.error ? errorAlert : null}
