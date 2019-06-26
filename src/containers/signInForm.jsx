@@ -28,20 +28,20 @@ class _SignInForm extends Component {
     toggle =()=>  this.setState({modal: !this.state.modal });
     handleChange =({target: {name, value }})=> this.setState({[name]: value});
     
-    handleSubmit =(e)=> {
+    handleSubmit = async (e)=> {
       e.preventDefault();
       const { email, psw } = this.state;
       
       if(!email || !psw ){
         this.setState ({
           error: true,
-         errorDescription: "UserName or Passwords cannot be empty"
+         errorDescription: "UserName or Password cannot be empty"
         }); 
         return;
       }
       
      const credentials = { email , psw };
-     const { success, errorMessage } = this.props.signInUser(credentials);
+     const { success, errorMessage } = await this.props.signInUser(credentials);
       if(success)
         this.props.history.push('/'); //redirect to aplication home 
        else
@@ -81,10 +81,10 @@ class _SignInForm extends Component {
                 <br/>
                 <a href="#" onClick={this.toggle}>Forgot password?</a>
               </div>
-              <div className="FormField">
+              <div className="FormField"> 
               <button className="FormField__Button mr-20 col-sm-5" onClick={this.handleSubmit}>Sign In</button>
               </div>
-              {errorDescription && <Error mensaje ={errorDescription}/>}
+              {errorDescription && <Error message ={errorDescription}/>} 
             </form>
           </div>
         );
