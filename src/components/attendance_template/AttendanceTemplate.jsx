@@ -35,7 +35,6 @@ class AttendanceTemplate extends Component {
   componentDidMount = () => {
     if (!this.props.user) {
       //Redirect
-      console.log('User has to log in');
     }
     this.setState({
       selectedSidebarOption: (this.props.user.role === '1') ? 

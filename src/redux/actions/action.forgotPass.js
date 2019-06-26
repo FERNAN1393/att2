@@ -8,7 +8,7 @@ import {
   REQUEST_SAPID_ERROR
 } from './../../constants/reduxActions';
 // Controllers for actions
-import { ExtractUserBySapId } from './../../controllers/ctrl.ShiftUser';
+import { ExtractUserBySapId, CreateAttUser } from './../../controllers/ctrl.ShiftUser';
 
 /** --------------------        Getting state manager       -----------------**/
 const gettingRequest = () => {
@@ -52,6 +52,18 @@ export const checksapIdAction = sapID => {
       }else{
         dispatch(sapIDError("There are not records with given SapId"));
       }
+    } catch(error) {
+      dispatch(sapIDError(error));
+    }
+  };
+};
+
+export const updateUser = newUser => {
+  return async dispatch => {
+    dispatch (gettingRequest());
+    try {
+      const response = await CreateAttUser(newUser);
+        dispatch(sapIdSuccess(response));  
     } catch(error) {
       dispatch(sapIDError(error));
     }

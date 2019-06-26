@@ -5,7 +5,7 @@
 import React from 'react';
 // Redux and actions dependencies
 import { connect } from 'react-redux';
-import {checksapIdAction} from './../redux/actions/action.forgotPass';
+import {checksapIdAction, updateUser} from './../redux/actions/action.forgotPass';
 // loading image
 import loading_image from './../resources/img/blue_loading.gif'; // Tell Webpack this JS file uses this image
 // Reactstrap components
@@ -25,6 +25,8 @@ class ForgotPass extends React.Component {
       sec2 : '',
       resp1: '',
       resp2: '',
+      pass1 : '',
+      pass2 : '',
     };
   }
   
@@ -38,9 +40,18 @@ class ForgotPass extends React.Component {
   
   toggle = () => {
     this.setState({
-      forgotStage : 1,
+      sapId : '',
+      forgotStage: 1,
       error : false,
-      userObj : {}
+      errorMsj : '',
+      question1 : '',
+      question2 : '',
+      sec1 : '',
+      sec2 : '',
+      resp1: '',
+      resp2: '',
+      pass1 : '',
+      pass2 : '',
     });
     this.props.toggleFun();
   }
@@ -73,10 +84,8 @@ class ForgotPass extends React.Component {
       return false;
     }
     await this.props.checksapIdAction( sapId );
-    await console.log(this.props.forgotObj);
     if(this.props.forgotObj.status === 'success'){
       const obj = this.props.forgotObj.response;
-      console.log("OBJ!!!!",obj)
       this.setState({
         question1 : obj.secureQuestions[0],
         question2 : obj.secureQuestions[1],
@@ -85,7 +94,6 @@ class ForgotPass extends React.Component {
         forgotStage:2,
         error: false
       });
-      console.log("ESTATE",this.state)
     }
     if(this.props.forgotObj.status === 'error'){
       this.setState({
@@ -95,18 +103,51 @@ class ForgotPass extends React.Component {
     }
 }
   
-  SendSecurityQuestions = async () => {
+  SendSecurityQuestions = () => {
     const res1 = this.state.resp1;
     const res2 = this.state.resp2;
-    const ans1 = this.state.sec1;
-    const ans2 = this.state.sec2;
-    if(res1 === ans1 && res2 === ans2)
-      console.log("SIMONNNNNNNNNNNNNN")
-    return false
+    const sec1 = this.state.sec1;
+    const sec2 = this.state.sec2;
+    if(res1 === sec1 && res2 === sec2){
+      this.setState({
+        forgotStage : 3,
+        error: false
+      });
+    }else{
+      this.setState({
+        error: true,
+        errorMsj : "Wrong aswers, try again." 
+      });
+    }
   }
   
   SendNewPassword = async () => {
-    
+    const pass1 = this.state.pass1;
+    const pass2 = this.state.pass2;
+    // if length is less than 6 set error
+    if(pass1.length < 6 || pass2.length < 6){
+      this.setState({
+        error: true,
+        errorMsj : "Password length must be at least 6 digit long." 
+      });
+      return false;
+    }
+    if(pass1 === pass2){
+      // change password
+      const newUser = await this.props.forgotObj.response;
+      newUser.password = pass1;
+      await this.props.updateUser(newUser);
+      this.setState({
+        error: false,
+        forgotStage : 4
+      });
+    }else{
+      // send error
+      this.setState({
+        error: true,
+        errorMsj : "Passwords not match." 
+      });
+    }
   }
   
   
@@ -125,7 +166,7 @@ class ForgotPass extends React.Component {
         <p>
           <b>SapId</b>
         </p>
-        <Input name="sapId" id="inputSapId"  required
+        <Input name="sapId"
           placeholder="Enter SapId here!" onChange={evt=>{this.handleChange(evt)}}
         />
         {this.state.error ? errorAlert : null}
@@ -139,17 +180,42 @@ class ForgotPass extends React.Component {
         <p>
           {this.state.forgotStage === 2 ? this.state.question1: null}
         </p>
-        <Input name="sec1" id="inputSapId" required
+        <Input name="sec1"
           placeholder="Enter first answer here!" onChange={evt=>{this.handleChange(evt)}}
         />
         <p>
           {this.state.forgotStage === 2 ? this.state.question2 : null}
         </p>
-        <Input name="sec2" id="inputSapId" required
+        <Input name="sec2"
           placeholder="Enter second answer here!" onChange={evt=>{this.handleChange(evt)}}
         />
         {this.state.error ? errorAlert : null}
       </div>
+    );
+    const printStage3 = (
+      <div>
+        <p>
+          <b>Type new password...</b>
+        </p>
+        <p>
+          Password
+        </p>
+        <Input name="pass1" 
+          placeholder="Enter first password here!" onChange={evt=>{this.handleChange(evt)}}
+        />
+        <p>
+          Confirm password
+        </p>
+        <Input name="pass2" 
+          placeholder="Enter second password here!" onChange={evt=>{this.handleChange(evt)}}
+        />
+        {this.state.error ? errorAlert : null}
+      </div>
+    );
+    const printStage4 = (
+      <Alert color="success">
+        Your password has been changed succesfully!
+      </Alert>  
     );
     
     return (
@@ -165,14 +231,19 @@ class ForgotPass extends React.Component {
           {this.props.forgotObj.status !== 'loading' ? null : loadingImg}
           {this.state.forgotStage === 1 && this.props.forgotObj.status !== 'loading'? printStage1 : null}
           {this.state.forgotStage === 2 && this.props.forgotObj.status !== 'loading'? printStage2 : null}
-          {this.state.forgotStage === 3 && this.props.forgotObj.status !== 'loading'? printStage1 : null}
+          {this.state.forgotStage === 3 && this.props.forgotObj.status !== 'loading'? printStage3 : null}
+          {this.state.forgotStage === 4 && this.props.forgotObj.status !== 'loading'? printStage4 : null}
           <center>
             <br />
-            <Button color="secondary" size="md" block onClick={()=>{this.handleSubmit()}}>
-              {stageBtnText}
-            </Button>{' '}
-            <br />
-            <Button color="link" size="md" block onClick={()=>{this.toggle()}}>Cancel</Button>
+            {
+              this.state.forgotStage < 4?
+                <Button color="secondary" size="md" block onClick={()=>{this.handleSubmit()}}>
+                  {stageBtnText}
+                </Button>
+              : 
+                null
+            }
+            <Button color="link" size="md" block onClick={()=>{this.toggle()}}>Close</Button>
           </center>
         </ModalBody>
         <ModalFooter>
@@ -193,6 +264,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = ({
     checksapIdAction,
+    updateUser
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForgotPass);

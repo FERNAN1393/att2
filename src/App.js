@@ -38,19 +38,6 @@ const admin = {
   ],
   status: 'active'
 };
-const user = {
-  projectName: 'USAA EIS MCA Mexico',
-  projectCode: 'C/140685',
-  reportingManager: '51477851',
-  sapId: '51643140',
-  batchNumber: '302',
-  employeeName: 'SIMON PEDRO GUERRERO AGUILAR',
-  email: 'Simon.Aguilar@hcl.com',
-  role: '2',
-  client: 'USAA',
-  status: 'active'
-};
-
 
 class _App extends React.Component{
    constructor(props) {
@@ -66,7 +53,6 @@ class _App extends React.Component{
   
   render = () => {
     const { user: loggedUser } = this.props; 
-    console.log(this.props);
     return (
         <div className="App">
           <div className="App__Form" >

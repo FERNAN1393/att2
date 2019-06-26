@@ -4,7 +4,6 @@
 import React, { Component } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { signInUser } from '../redux/actions/action.signIn';
 import { Error } from '../components';
@@ -56,7 +55,7 @@ class _SignInForm extends Component {
     }
   
     render() {
-    const { errorDescription, modal, email, psw } =this.state;
+    const { errorDescription, email, psw } =this.state;
 
         return (
         <div>
