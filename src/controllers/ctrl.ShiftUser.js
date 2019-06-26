@@ -48,13 +48,11 @@ export function ExtractAllUsers () {
  */
 export function ExtractUserBySapId (sapId) {
   const db = firebase.firestore();
-  console.log("CONTROLLER_SAPI_ID:",sapId)
   const fraterUsers = db.collection(USER_COLLECTION);
-  return fraterUsers.where("sapId","==",sapId).get().then(function(user) {
+  return fraterUsers.where("user.sapId","==",sapId).get().then(function(user) {
     let sUser = null;
     if(user !== undefined && user.docs.length > 0)
         sUser = user.docs[0].data();
-        
     return sUser;
   }).catch(err =>{
       throw err;

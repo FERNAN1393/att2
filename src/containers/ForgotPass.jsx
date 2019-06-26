@@ -19,7 +19,10 @@ class ForgotPass extends React.Component {
       forgotStage: 1,
       error : false,
       errorMsj : '',
-      userObj : {}
+      question1 : '',
+      question12 : '',
+      sec1 : '',
+      sec2 : ''
     };
   }
   
@@ -31,13 +34,22 @@ class ForgotPass extends React.Component {
     });
   }
   
+  toggle = () => {
+    this.setState({
+      forgotStage : 1,
+      error : false,
+      userObj : {}
+    });
+    this.props.toggleFun();
+  }
+  
   setButtonText = () => {
     if ( this.state.forgotStage === 1)
-      return "Send SapId "
+      return "Send SapId ";
     if ( this.state.forgotStage === 2)
-      return "Send Aswers "
+      return "Send Aswers ";
     if ( this.state.forgotStage === 3)
-      return "Change Password "
+      return "Change Password ";
   }
   
   handleSubmit = async () => {
@@ -50,27 +62,36 @@ class ForgotPass extends React.Component {
   }
   
   SendSapID = async () => {
-    await console.log(this.props.forgotObj)
-    await console.log("si entro al SendSapID")
-    const response = await this.props.checksapIdAction( await this.state.sapId);
-    await console.log("SUSCCEESS", response)
-    await console.log(this.props.forgotObj)
+    const sapId = await this.state.sapId;
+    if ( sapId.length !== 8){
+      this.setState({
+        error: true,
+        errorMsj : "SapId length must be 8 digit long"
+      });
+      return false;
+    }
+    await this.props.checksapIdAction( sapId );
+    await console.log(this.props.forgotObj);
     if(this.props.forgotObj.status === 'success'){
+      let obj = this.props.forgotObj.response;
+      
+      obj = obj.user.secureQuestions
+      console.log("OBJ!!!!",obj)
       this.setState({
         userObj : this.props.forgotObj.response,
         forgotStage:2,
         error: false
-      })
+      });
     }
     if(this.props.forgotObj.status === 'error'){
       this.setState({
         error: true,
         errorMsj : this.props.forgotObj.error
-      })
+      });
     }
 }
   
-  forgotStage = async () => {
+  SendSecurityQuestions = async () => {
     
   }
   
@@ -86,24 +107,44 @@ class ForgotPass extends React.Component {
       <Alert color="danger">
         {this.state.errorMsj}
       </Alert>  
-    )
+    );
     const loadingImg = (<center><img src={loading_image} alt="loading..." /></center>);
+    
     const printStage1 = (
       <div>
         <p>
           <b>SapId</b>
         </p>
-        <Input name="sapId" id="inputSapId" 
+        <Input name="sapId" id="inputSapId"  required
           placeholder="Enter SapId here!" onChange={evt=>{this.handleChange(evt)}}
         />
         {this.state.error ? errorAlert : null}
       </div>
     );
-    
+    const printStage2 = (
+      <div>
+        <p>
+          <b>Security questions...</b>
+        </p>
+        <p>
+          {this.state.forgotStage === 2 ? null : null}
+        </p>
+        <Input name="sec1" id="inputSapId" required
+          placeholder="Enter first answer here!" onChange={evt=>{this.handleChange(evt)}}
+        />
+        <p>
+          {this.state.forgotStage === 2 ? null : null}
+        </p>
+        <Input name="sec2" id="inputSapId" required
+          placeholder="Enter second answer here!" onChange={evt=>{this.handleChange(evt)}}
+        />
+        {this.state.error ? errorAlert : null}
+      </div>
+    );
     
     return (
-      <Modal isOpen={this.props.isOpen} fade={false} toggle={()=>{this.props.toggleFun()}}>
-        <ModalHeader toggle={()=>{this.props.toggleFun()}}>Reset your password</ModalHeader>
+      <Modal isOpen={this.props.isOpen} fade={false} toggle={()=>{this.toggle()}}>
+        <ModalHeader toggle={()=>{this.toggle()}}>Reset your password</ModalHeader>
         <ModalBody>
           <h1>
             Forgot Password?
@@ -113,7 +154,7 @@ class ForgotPass extends React.Component {
           </p>
           {this.props.forgotObj.status !== 'loading' ? null : loadingImg}
           {this.state.forgotStage === 1 && this.props.forgotObj.status !== 'loading'? printStage1 : null}
-          {this.state.forgotStage === 2 && this.props.forgotObj.status !== 'loading'? printStage1 : null}
+          {this.state.forgotStage === 2 && this.props.forgotObj.status !== 'loading'? printStage2 : null}
           {this.state.forgotStage === 3 && this.props.forgotObj.status !== 'loading'? printStage1 : null}
           <center>
             <br />
@@ -121,7 +162,7 @@ class ForgotPass extends React.Component {
               {stageBtnText}
             </Button>{' '}
             <br />
-            <Button color="link" size="md" block onClick={()=>{this.props.toggleFun()}}>Cancel</Button>
+            <Button color="link" size="md" block onClick={()=>{this.toggle()}}>Cancel</Button>
           </center>
         </ModalBody>
         <ModalFooter>

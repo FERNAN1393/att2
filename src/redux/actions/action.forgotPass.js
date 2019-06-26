@@ -49,8 +49,9 @@ export const checksapIdAction = sapID => {
       const response = await ExtractUserBySapId(sapID);
       if (response !== null){
         dispatch(sapIdSuccess(response));  
-      }
+      }else{
         dispatch(sapIDError("There are not records with given SapId"));
+      }
     } catch(error) {
       dispatch(sapIDError(error));
     }
