@@ -2,6 +2,9 @@
 *   Description: Main app Container. Routes for app.
 **/
 import React from 'react';
+import * as firebase from "firebase";
+//import Admin from "firebase-admin";
+import { FirebaseCon } from "./constants/Collections";
 
 //  ----------- TBDeleted -------------------
 import ForgotPass from './containers/ForgotPass';
@@ -44,6 +47,18 @@ class App extends React.Component {
     )
     
   };
+
+    /*Funcion demo de como usar async con firebase
+    Login = async ()=>{
+      const res = await SignIn("javier", "123");
+      alert (res.name);
+    }
+    
+    componentDidMount(){
+      this.Login();
+    }*/
+  
+
 }
 
 export default App;
