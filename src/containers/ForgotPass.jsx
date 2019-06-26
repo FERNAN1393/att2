@@ -46,8 +46,11 @@ class ForgotPass extends React.Component {
   
   render() {
     const buttonText = this.setButtonText();
+    const loadingImg = (<center><img src={loading_image} alt="loading..." /></center>);
     return (
+      
       <div>
+        {loadingImg}
           <ModalHeader toggle={this.props.toggle}>Reset your password</ModalHeader>
           <ModalBody>
             <h1>
@@ -68,7 +71,7 @@ class ForgotPass extends React.Component {
               </Button>{' '}
             </center>
             
-            <img src={loading_image} alt="loading..." />
+            
             
             <center>
               <Button color="link" size="md" block onClick={()=>{this.props.toggleFun()}}>Cancel</Button>
