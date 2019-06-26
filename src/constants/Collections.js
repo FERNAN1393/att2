@@ -27,6 +27,8 @@ export const SHIFT_USER_REMOVED = "removed";
 export const NO_RESULT_FOUND = "N/A";
 
 
-
+/* Attendance role */
+export const ROLE_USER = "2";
+export const ROLE_ADMIN = "1";
 
 
