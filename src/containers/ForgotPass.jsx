@@ -20,9 +20,11 @@ class ForgotPass extends React.Component {
       error : false,
       errorMsj : '',
       question1 : '',
-      question12 : '',
+      question2 : '',
       sec1 : '',
-      sec2 : ''
+      sec2 : '',
+      resp1: '',
+      resp2: '',
     };
   }
   
@@ -73,15 +75,17 @@ class ForgotPass extends React.Component {
     await this.props.checksapIdAction( sapId );
     await console.log(this.props.forgotObj);
     if(this.props.forgotObj.status === 'success'){
-      let obj = this.props.forgotObj.response;
-      
-      obj = obj.user.secureQuestions
+      const obj = this.props.forgotObj.response;
       console.log("OBJ!!!!",obj)
       this.setState({
-        userObj : this.props.forgotObj.response,
+        question1 : obj.secureQuestions[0],
+        question2 : obj.secureQuestions[1],
+        resp1 :obj.secureAnswers[0],
+        resp2 : obj.secureAnswers[1],
         forgotStage:2,
         error: false
       });
+      console.log("ESTATE",this.state)
     }
     if(this.props.forgotObj.status === 'error'){
       this.setState({
@@ -92,7 +96,13 @@ class ForgotPass extends React.Component {
 }
   
   SendSecurityQuestions = async () => {
-    
+    const res1 = this.state.resp1;
+    const res2 = this.state.resp2;
+    const ans1 = this.state.sec1;
+    const ans2 = this.state.sec2;
+    if(res1 === ans1 && res2 === ans2)
+      console.log("SIMONNNNNNNNNNNNNN")
+    return false
   }
   
   SendNewPassword = async () => {
@@ -127,13 +137,13 @@ class ForgotPass extends React.Component {
           <b>Security questions...</b>
         </p>
         <p>
-          {this.state.forgotStage === 2 ? null : null}
+          {this.state.forgotStage === 2 ? this.state.question1: null}
         </p>
         <Input name="sec1" id="inputSapId" required
           placeholder="Enter first answer here!" onChange={evt=>{this.handleChange(evt)}}
         />
         <p>
-          {this.state.forgotStage === 2 ? null : null}
+          {this.state.forgotStage === 2 ? this.state.question2 : null}
         </p>
         <Input name="sec2" id="inputSapId" required
           placeholder="Enter second answer here!" onChange={evt=>{this.handleChange(evt)}}
