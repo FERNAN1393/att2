@@ -1,10 +1,18 @@
+//React libraries
 import React, { Component } from "react";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import PropTypes from "prop-types";
-//import {get, post } from "../axios/";
-import { Alert, Button, DropdownItem, Row, Col } from "reactstrap";
+import { Alert, Button, Row, Col } from "reactstrap";
+//Attendance jsx files
 import CalendarAdminControlPanel from "../../components/calendar/CalendarAdminControlPanel";
 import CalendarUserPanel from "../../components/calendar/CalendarUserPanel";
 import CalendarMonth from "../../components/calendar/CalendarMonth";
+import PopUpLoading from "../../components/pop_up_loading/PopUpLoading";
+//Redux actions
+import {getHolidays} from '../../redux/actions/action.getHolidays';
+import {getEmpCalendars} from '../../redux/actions/action.getEmpCalendars';
+//Constants
 import {
   MONTHS_LONG,
   DAYS_IN_MONTH,
@@ -15,795 +23,10 @@ import {
   UPLOAD_CALENDAR_URL,
   GET_HOLIDAYS_URL
 } from "../../constants/util";
-import PopUpLoading from "../../components/pop_up_loading/PopUpLoading";
-
+//Attendance css files
 import "../../resources/css/calendar/calendar.css";
 
-const holidays = [
-  {
-    holidayName: "New Year",
-    holidayDescription: "Happy",
-    holidayType: "National holiday",
-    holidayDate: "00/01/19",
-    createdBy: "Admin",
-    createdAt: "11/12/2018",
-    status: "active",
-    year: "2019"
-  },
-  {
-    holidayName: "Constitution Day",
-    holidayDescription: "Constitution Day",
-    holidayType: "Non-workable day",
-    holidayDate: "01/04/19",
-    createdBy: "Guillermina ",
-    createdAt: "1/11/2019",
-    status: "active",
-    year: "2019"
-  },
-  {
-    holidayName: "Benito Juarez Day ",
-    holidayDescription: "Benito Juarez Day ",
-    holidayType: "Non-workable day",
-    holidayDate: "02/18/19",
-    createdBy: "Guillermina ",
-    createdAt: "1/11/2019",
-    status: "active",
-    year: "2019"
-  },
-  {
-    holidayName: "Maundy Thursday",
-    holidayDescription: "Maundy Thursday",
-    holidayType: "HCL DayOff",
-    holidayDate: "03/18/19",
-    createdBy: "Guillermina ",
-    createdAt: "1/11/2019",
-    status: "active",
-    year: "2019"
-  },
-  {
-    holidayName: "Good Friday ",
-    holidayDescription: "Good Friday ",
-    holidayType: "HCL DayOff",
-    holidayDate: "03/19/19",
-    createdBy: "Guillermina ",
-    createdAt: "1/11/2019",
-    status: "active",
-    year: "2019"
-  },
-  {
-    holidayName: "Labour Day ",
-    holidayDescription: "Labour Day ",
-    holidayType: "National holiday",
-    holidayDate: "04/01/19",
-    createdBy: "Guillermina ",
-    createdAt: "1/11/2019",
-    status: "active",
-    year: "2019"
-  },
-  {
-    holidayName: "Dia de la independecia",
-    holidayDescription: "National",
-    holidayType: "National holiday",
-    holidayDate: "08/16/19",
-    createdBy: "Admin",
-    createdAt: "0/3/2019",
-    status: "active",
-    year: "2019"
-  },
-  {
-    holidayName: "Chirstmas",
-    holidayDescription: "Merry Christmas to everyone!",
-    holidayType: "Non-workable day",
-    holidayDate: "11/25/18",
-    createdBy: "Admin",
-    createdAt: "11/13/2018",
-    status: "active",
-    year: "2018"
-  },
-  {
-    holidayName: "Special day",
-    holidayDescription: "A special day",
-    holidayType: "Non-workable day",
-    holidayDate: "4/5/19",
-    createdBy: "Admin",
-    createdAt: "11/13/2018",
-    status: "active",
-    year: "2019"
-  },
-  {
-    holidayName: "Special day",
-    holidayDescription: "A special day",
-    holidayType: "National holiday",
-    holidayDate: "4/6/19",
-    createdBy: "Admin",
-    createdAt: "11/13/2018",
-    status: "active",
-    year: "2019"
-  },
-  {
-    holidayName: "Special day",
-    holidayDescription: "A special day",
-    holidayType: "Non-workable day",
-    holidayDate: "5/5/19",
-    createdBy: "Admin",
-    createdAt: "11/13/2018",
-    status: "active",
-    year: "2019"
-  },
-  {
-    holidayName: "Special day",
-    holidayDescription: "A special day",
-    holidayType: "Non-workable day",
-    holidayDate: "5/10/19",
-    createdBy: "Admin",
-    createdAt: "11/13/2018",
-    status: "active",
-    year: "2019"
-  }
-];
-
-const empCalendar = [
-  {
-    year: '2018',
-    employeeName: 'KARTHICK NATARAJAN',
-    sapId: '51300271',
-    month: '1',
-    days: [
-      {
-        day: '1',
-        value: 'S'
-      },
-      {
-        day: '2',
-        value: 'H'
-      },
-      {
-        day: '3',
-        value: 'S'
-      },
-      {
-        day: '4',
-        value: 'H'
-      },
-      {
-        day: '5',
-        value: 'S'
-      },
-      {
-        day: '6',
-        value: 'S'
-      },
-      {
-        day: '7',
-        value: 'S'
-      },
-      {
-        day: '8',
-        value: 'S'
-      },
-      {
-        day: '9',
-        value: 'S'
-      },
-      {
-        day: '10',
-        value: 'S'
-      },
-      {
-        day: '11',
-        value: 'S'
-      },
-      {
-        day: '12',
-        value: 'S'
-      },
-      {
-        day: '13',
-        value: 'S'
-      },
-      {
-        day: '14',
-        value: 'O'
-      },
-      {
-        day: '15',
-        value: 'S'
-      },
-      {
-        day: '16',
-        value: 'S'
-      },
-      {
-        day: '17',
-        value: 'S'
-      },
-      {
-        day: '18',
-        value: 'S'
-      },
-      {
-        day: '19',
-        value: 'S'
-      },
-      {
-        day: '20',
-        value: 'S'
-      },
-      {
-        day: '21',
-        value: 'S'
-      },
-      {
-        day: '22',
-        value: 'S'
-      },
-      {
-        day: '23',
-        value: 'S'
-      },
-      {
-        day: '24',
-        value: 'S'
-      },
-      {
-        day: '25',
-        value: 'S'
-      },
-      {
-        day: '26',
-        value: 'S'
-      },
-      {
-        day: '27',
-        value: 'S'
-      },
-      {
-        day: '28',
-        value: 'S'
-      },
-      {
-        day: '29',
-        value: 'T'
-      },
-      {
-        day: '30',
-        value: 'T'
-      },
-      {
-        day: '31',
-        value: 'T'
-      }
-    ]
-  },
-  {
-    year: '2019',
-    employeeName: 'KARTHICK NATARAJAN',
-    sapId: '51300271',
-    month: '2',
-    days: [
-      {
-        day: '1',
-        value: 'S'
-      },
-      {
-        day: '2',
-        value: 'H'
-      },
-      {
-        day: '3',
-        value: 'S'
-      },
-      {
-        day: '4',
-        value: 'H'
-      },
-      {
-        day: '5',
-        value: 'S'
-      },
-      {
-        day: '6',
-        value: 'S'
-      },
-      {
-        day: '7',
-        value: 'S'
-      },
-      {
-        day: '8',
-        value: 'S'
-      },
-      {
-        day: '9',
-        value: 'S'
-      },
-      {
-        day: '10',
-        value: 'S'
-      },
-      {
-        day: '11',
-        value: 'S'
-      },
-      {
-        day: '12',
-        value: 'S'
-      },
-      {
-        day: '13',
-        value: 'S'
-      },
-      {
-        day: '14',
-        value: 'O'
-      },
-      {
-        day: '15',
-        value: 'S'
-      },
-      {
-        day: '16',
-        value: 'S'
-      },
-      {
-        day: '17',
-        value: 'S'
-      },
-      {
-        day: '18',
-        value: 'S'
-      },
-      {
-        day: '19',
-        value: 'S'
-      },
-      {
-        day: '20',
-        value: 'S'
-      },
-      {
-        day: '21',
-        value: 'S'
-      },
-      {
-        day: '22',
-        value: 'S'
-      },
-      {
-        day: '23',
-        value: 'S'
-      },
-      {
-        day: '24',
-        value: 'S'
-      },
-      {
-        day: '25',
-        value: 'S'
-      },
-      {
-        day: '26',
-        value: 'S'
-      },
-      {
-        day: '27',
-        value: 'S'
-      },
-      {
-        day: '28',
-        value: 'S'
-      },
-      {
-        day: '29',
-        value: 'T'
-      },
-      {
-        day: '30',
-        value: 'T'
-      },
-      {
-        day: '31',
-        value: 'T'
-      }
-    ]
-  },
-  {
-    year: '2019',
-    employeeName: 'KARTHICK NATARAJAN',
-    sapId: '51300271',
-    month: '3',
-    days: [
-      {
-        day: '1',
-        value: 'S'
-      },
-      {
-        day: '2',
-        value: 'S'
-      },
-      {
-        day: '3',
-        value: 'S'
-      },
-      {
-        day: '4',
-        value: 'H'
-      },
-      {
-        day: '5',
-        value: 'S'
-      },
-      {
-        day: '6',
-        value: 'S'
-      },
-      {
-        day: '7',
-        value: 'S'
-      },
-      {
-        day: '8',
-        value: 'S'
-      },
-      {
-        day: '9',
-        value: 'S'
-      },
-      {
-        day: '10',
-        value: 'S'
-      },
-      {
-        day: '11',
-        value: 'S'
-      },
-      {
-        day: '12',
-        value: 'S'
-      },
-      {
-        day: '13',
-        value: 'S'
-      },
-      {
-        day: '14',
-        value: 'S'
-      },
-      {
-        day: '15',
-        value: 'S'
-      },
-      {
-        day: '16',
-        value: 'S'
-      },
-      {
-        day: '17',
-        value: 'S'
-      },
-      {
-        day: '18',
-        value: 'S'
-      },
-      {
-        day: '19',
-        value: 'S'
-      },
-      {
-        day: '20',
-        value: 'S'
-      },
-      {
-        day: '21',
-        value: 'S'
-      },
-      {
-        day: '22',
-        value: 'S'
-      },
-      {
-        day: '23',
-        value: 'S'
-      },
-      {
-        day: '24',
-        value: 'S'
-      },
-      {
-        day: '25',
-        value: 'S'
-      },
-      {
-        day: '26',
-        value: 'S'
-      },
-      {
-        day: '27',
-        value: 'S'
-      },
-      {
-        day: '28',
-        value: 'S'
-      },
-      {
-        day: '29',
-        value: 'T'
-      },
-      {
-        day: '30',
-        value: 'O'
-      },
-      {
-        day: '31',
-        value: 'X'
-      }
-    ]
-  },
-  {
-    year: '2019',
-    employeeName: 'KARTHICK NATARAJAN',
-    sapId: '51300271',
-    month: '4',
-    days: [
-      {
-        day: '1',
-        value: 'S'
-      },
-      {
-        day: '2',
-        value: 'H'
-      },
-      {
-        day: '3',
-        value: 'S'
-      },
-      {
-        day: '4',
-        value: 'H'
-      },
-      {
-        day: '5',
-        value: 'S'
-      },
-      {
-        day: '6',
-        value: 'S'
-      },
-      {
-        day: '7',
-        value: 'S'
-      },
-      {
-        day: '8',
-        value: 'S'
-      },
-      {
-        day: '9',
-        value: 'S'
-      },
-      {
-        day: '10',
-        value: 'S'
-      },
-      {
-        day: '11',
-        value: 'S'
-      },
-      {
-        day: '12',
-        value: 'S'
-      },
-      {
-        day: '13',
-        value: 'S'
-      },
-      {
-        day: '14',
-        value: 'O'
-      },
-      {
-        day: '15',
-        value: 'S'
-      },
-      {
-        day: '16',
-        value: 'S'
-      },
-      {
-        day: '17',
-        value: 'S'
-      },
-      {
-        day: '18',
-        value: 'S'
-      },
-      {
-        day: '19',
-        value: 'S'
-      },
-      {
-        day: '20',
-        value: 'S'
-      },
-      {
-        day: '21',
-        value: 'S'
-      },
-      {
-        day: '22',
-        value: 'S'
-      },
-      {
-        day: '23',
-        value: 'S'
-      },
-      {
-        day: '24',
-        value: 'S'
-      },
-      {
-        day: '25',
-        value: 'S'
-      },
-      {
-        day: '26',
-        value: 'S'
-      },
-      {
-        day: '27',
-        value: 'S'
-      },
-      {
-        day: '28',
-        value: 'S'
-      },
-      {
-        day: '29',
-        value: 'T'
-      },
-      {
-        day: '30',
-        value: 'T'
-      },
-      {
-        day: '31',
-        value: 'T'
-      }
-    ]
-  },
-  {
-    year: '2019',
-    employeeName: 'KARTHICK NATARAJAN',
-    sapId: '51300271',
-    month: '5',
-    days: [
-      {
-        day: '1',
-        value: 'S'
-      },
-      {
-        day: '2',
-        value: 'H'
-      },
-      {
-        day: '3',
-        value: 'S'
-      },
-      {
-        day: '4',
-        value: 'H'
-      },
-      {
-        day: '5',
-        value: 'S'
-      },
-      {
-        day: '6',
-        value: 'S'
-      },
-      {
-        day: '7',
-        value: 'S'
-      },
-      {
-        day: '8',
-        value: 'S'
-      },
-      {
-        day: '9',
-        value: 'S'
-      },
-      {
-        day: '10',
-        value: 'S'
-      },
-      {
-        day: '11',
-        value: 'S'
-      },
-      {
-        day: '12',
-        value: 'S'
-      },
-      {
-        day: '13',
-        value: 'S'
-      },
-      {
-        day: '14',
-        value: 'O'
-      },
-      {
-        day: '15',
-        value: 'S'
-      },
-      {
-        day: '16',
-        value: 'S'
-      },
-      {
-        day: '17',
-        value: 'S'
-      },
-      {
-        day: '18',
-        value: 'S'
-      },
-      {
-        day: '19',
-        value: 'S'
-      },
-      {
-        day: '20',
-        value: 'S'
-      },
-      {
-        day: '21',
-        value: 'S'
-      },
-      {
-        day: '22',
-        value: 'S'
-      },
-      {
-        day: '23',
-        value: 'S'
-      },
-      {
-        day: '24',
-        value: 'S'
-      },
-      {
-        day: '25',
-        value: 'S'
-      },
-      {
-        day: '26',
-        value: 'S'
-      },
-      {
-        day: '27',
-        value: 'S'
-      },
-      {
-        day: '28',
-        value: 'S'
-      },
-      {
-        day: '29',
-        value: 'T'
-      },
-      {
-        day: '30',
-        value: 'T'
-      },
-      {
-        day: '31',
-        value: 'T'
-      }
-    ]
-  }
-];
+import {CreateCalendar} from '../../controllers/ctrl.Calendar'
 
 class Calendar extends Component {
   constructor(props) {
@@ -827,7 +50,6 @@ class Calendar extends Component {
         this.user.role === ADMIN_USER ? null : this.user,
       month: null, //Days of month CHANGE
       empCalendarsRegistered: null,//null, //Registered calendars by employee
-      holidays: {},
       isEditableMonth: false,
       //selectedMonth: new Date().getMonth() + 1, //Next month
       selectedMonth: new Date().getMonth(), //Actual month
@@ -835,63 +57,28 @@ class Calendar extends Component {
       alerts: false,
       typeAlert: "",
       modalAppear: false,
-      uploading: false,
-      loading: false
+      uploading: false
     };
-    
-    
   }
 
   /** 
    * @abstract Request for holidays before component is mounted.
    */
-  componentWillMount = () => {
-    const holidaysObj = {};
-    let day, month, year;
-    //console.log('Data', res.data); //Get all holidays
-    for (let i = 0; i < holidays.length; i++) {
-      //Roam holidays
-      let holiday = holidays[i];
-      [month, day] = holiday.holidayDate.split("/"); //Has format mm/dd/yy and they start from 0
-      year = parseInt(holiday.year);
-      month = parseInt(month);
-      day = parseInt(day);
-      if (!holidaysObj.hasOwnProperty(year)) {
-        //Create year object
-        holidaysObj[year] = {};
-      }
-      if (!holidaysObj[year].hasOwnProperty(month)) {
-        //Create month object
-        holidaysObj[year][month] = {};
-      }
-      if (!holidaysObj[year][month].hasOwnProperty(day)) {
-        //Create day object
-        holidaysObj[year][month][day] = {
-          holidaysInfo: []
-        };
-      }
-      holidaysObj[year][month][day].holidaysInfo.push({
-        name: holiday.holidayName,
-        type: holiday.holidayType,
-        description: holiday.holidayDescription
-      });
-    }
-    // this.fillMonth(
-    //   this.state.selectedMonth,
-    //   this.state.selectedYear,
-    //   this.state.empCalendarsRegistered,
-    //   holidaysObj
-    // );
-    this.setState({
-      holidays: holidaysObj
-    });
+  componentWillMount = async () => {
+    console.log('Get calendars');
+    await this.props.getHolidays();
+    //await this.props.getEmpCalendars();
+    this.updateCalendars();
   };
 
   /** 
    * @abstract Calls component's updateCalendars method
    */
   componentDidMount = () => {
-    this.updateCalendars();
+    //this.fillMonth();
+    //console.log('Filling');
+    //this.updateCalendars();
+    //this.fillMonth();
   };
 
   /** 
@@ -907,7 +94,7 @@ class Calendar extends Component {
   ) => {
     try {
       return (
-        this.state.holidays[year][month][day].holidaysInfo[0].type ===
+        this.props.holidays[year][month][day].holidaysInfo[0].type ===
         "Non-workable day"
       );
     } catch (error) {
@@ -917,7 +104,7 @@ class Calendar extends Component {
   
   isHoliday = (day, month, year) => {
     try {
-      const holidayType = this.state.holidays[year][month][day].holidaysInfo[0]
+      const holidayType = this.props.holidays[year][month][day].holidaysInfo[0]
         .type;
       return holidayType === "National holiday" || holidayType === "HCL DayOff";
     } catch (error) {
@@ -948,7 +135,7 @@ class Calendar extends Component {
     month = this.state.selectedMonth,
     year = this.state.selectedYear,
     empCalendarsRegistered = this.state.empCalendarsRegistered,
-    holidays = this.state.holidays
+    holidays = this.props.holidays
   ) => {
     const monthCalendar = [];
     const currentEmpCalendar = empCalendarsRegistered
@@ -956,6 +143,7 @@ class Calendar extends Component {
           calendar => parseInt(calendar.month) === month
         )
       : undefined;
+    console.log('Calendars', currentEmpCalendar);
     let dayType;
     for (let i = 0; i < DAYS_IN_MONTH; i++) {
       dayType = null;
@@ -984,6 +172,7 @@ class Calendar extends Component {
             }
       );
     }
+    console.log('Calendar', monthCalendar);
 
     this.setState({
       isEditableMonth: this.checkIfIsEditableMonth(month, year),
@@ -1143,10 +332,11 @@ class Calendar extends Component {
    */
   updateCalendars = (employee = this.state.calendarEmployee) => {
     console.log('Update calendars');
-    this.setState({
+    /*this.setState({
       empCalendarsRegistered: null
-    });
+    });*/
     if (employee !== null) {
+      const empCalendar = this.props.empCalendars;
       const registeredCalendars = [];
       const date = new Date();
       const year = date.getFullYear(),
@@ -1159,8 +349,7 @@ class Calendar extends Component {
       this.setState({
         empCalendarsRegistered: registeredCalendars, //Array
         selectedMonth: month, //Actual month
-        selectedYear: year,
-        loading: false
+        selectedYear: year
       });
     }
   };
@@ -1197,7 +386,7 @@ class Calendar extends Component {
     return [...empCalendarsRegistered, calendar];
   };
 
-  submitMonth = () => {
+  submitMonth = async () => {
     if (this.validateMonth() && this.state.isEditableMonth) {
       const totalDays = new Date(
         this.state.selectedYear,
@@ -1218,37 +407,9 @@ class Calendar extends Component {
         month: this.state.selectedMonth,
         days: days
       };
-      this.setState({
-        uploading: true
-      });
-      /*post(UPLOAD_CALENDAR_URL, calendarPayload)
-        .then(res => {
-          if (res.data == "ok") {
-            this.setState({
-              alerts: true,
-              typeAlert: "success",
-              uploading: false,
-              empCalendarsRegistered: this.updateEmployeeCalendars(
-                calendarPayload
-              )
-            });
-          } else {
-            this.setState({
-              alerts: true,
-              typeAlert: "error",
-              uploading: false
-            });
-          }
-          //An calendarEmployee should be already in the state for this
-          //this.updateCalendars();
-        })
-        .catch(error => {
-          this.setState({
-            alerts: true,
-            typeAlert: "warning",
-            uploading: false
-          });
-        });*/
+      
+      const response = await CreateCalendar(calendarPayload);
+      console.log(response);
     } else {
       alert("You have to fill all days");
     }
@@ -1323,7 +484,7 @@ class Calendar extends Component {
             <Row className="calendar-month-container">
               <Col sm="12">
                 <CalendarMonth
-                  holidays={this.state.holidays}
+                  holidays={this.props.holidays}
                   isNonWorkableDay={this.isNonWorkableDay}
                   month={this.state.selectedMonth}
                   monthTypes={this.state.month}
@@ -1347,12 +508,12 @@ class Calendar extends Component {
               </Col>
             </Row>
 
-            {this.state.uploading || this.state.loading ? (
+            {this.state.uploading || this.props.loading ? (
               <PopUpLoading
                 className="uploading-modal"
-                isOpen={this.state.uploading || this.state.loading}
+                isOpen={this.state.uploading || this.props.loading}
                 modalTitle={`${
-                  this.state.loading ? "Loading" : "Submitting"
+                  this.props.loading ? "Loading" : "Submitting"
                 } calendar`}
               >
                 <div className="calendar-loading">
@@ -1379,8 +540,57 @@ class Calendar extends Component {
   };
 }
 
+const mapStateToProps = state => {
+  const holidaysData = state.holidays;
+  const calendarData = state.calendar;
+  const holidays = holidaysData.holidays;
+  const empCalendars = calendarData.calendars;
+  const holidaysObj = {};
+  if (holidays) {
+    let day, month, year;
+    for (let i = 0; i < holidays.length; i++) {
+      //Roam holidays
+      let holiday = holidays[i];
+      [month, day] = holiday.holidayDate.split("/"); //Has format mm/dd/yy and they start from 0
+      year = parseInt(holiday.year);
+      month = parseInt(month);
+      day = parseInt(day);
+      if (!holidaysObj.hasOwnProperty(year)) {
+        //Create year object
+        holidaysObj[year] = {};
+      }
+      if (!holidaysObj[year].hasOwnProperty(month)) {
+        //Create month object
+        holidaysObj[year][month] = {};
+      }
+      if (!holidaysObj[year][month].hasOwnProperty(day)) {
+        holidaysObj[year][month][day] = {
+          holidaysInfo: []
+        };
+      }
+      holidaysObj[year][month][day].holidaysInfo.push({
+        name: holiday.holidayName,
+        type: holiday.holidayType,
+        description: holiday.holidayDescription
+      });
+    }
+  }
+  console.log('Loading holidays', holidaysData.loading);
+  console.log('Loading calendars', calendarData.loading);
+  return {
+    holidays: holidaysObj,
+    loading: holidaysData.loading || calendarData.loading,
+    empCalendars: empCalendars ? empCalendars : {}
+  };
+};
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    getHolidays, 
+    getEmpCalendars
+  }, dispatch);
+
 Calendar.propTypes = {
   user: PropTypes.object
 };
 
-export default Calendar;
+export default connect(mapStateToProps, mapDispatchToProps)(Calendar);

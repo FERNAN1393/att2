@@ -29,7 +29,6 @@ class CalendarUserPanel extends Component {
     const registeredCalendars = [];
     const registeredYears = [];
     let hasLastMonthRegistered = false;
-    console.log('User pane', this.props.registeredCalendars);
     this.props.registeredCalendars.forEach((monthData, index) => {
       let year;
       let month;

@@ -7,8 +7,11 @@ Params: User : { }
 */
 export const signInUser = ({email, psw }) =>  async dispatch => {
     try {
-        const userLoggedInfo = await SignIn(email, psw);
-        userLoggedInfo && dispatch({type: USER_LOGGED, user: userLoggedInfo })
+        console.log('About');
+        const userLoggedInfo = user;
+        //const userLoggedInfo = await SignIn(email, psw);
+        userLoggedInfo && dispatch({type: USER_LOGGED, user: userLoggedInfo });
+        console.log('logged', userLoggedInfo);
         return {success:true,errorMessage:  !userLoggedInfo && 'User invalid, email or password is incorrect!'};
     }catch(e){
         return {success:false, errorMessage: 'Verify your internet connection'}
@@ -17,3 +20,15 @@ export const signInUser = ({email, psw }) =>  async dispatch => {
 };
 
   
+const user = {
+  projectName: 'USAA EIS MCA Mexico',
+  projectCode: 'C/140685',
+  reportingManager: '51477851',
+  sapId: '51643140',
+  batchNumber: '302',
+  employeeName: 'SIMON PEDRO GUERRERO AGUILAR',
+  email: 'Simon.Aguilar@hcl.com',
+  role: '2',
+  client: 'USAA',
+  status: 'active'
+};

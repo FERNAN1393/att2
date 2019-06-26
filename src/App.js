@@ -66,6 +66,7 @@ class _App extends React.Component{
   render = () => {
     const { user: loggedUser } = this.props; 
     console.log(this.props);
+    const redirectTo = loggedUser && loggedUser.role === 'admin' ? '/upload' : '/calendar';
     return (
       <div className="App">
         <div className="App__Form" >
@@ -74,10 +75,19 @@ class _App extends React.Component{
             {!loggedUser && <Route path='/login' component={SignInForm}  /> }
             {!loggedUser && <Redirect to='/login' /> }
             
-            <Redirect exact from='/login' to='/' /> 
+            <Redirect exact from='/login' to={redirectTo} /> 
     
-            <Route  exact  path="/calendar" render={(props) => <AttendanceTemplate {...props} user={loggedUser} component={Calendar}  />} />
-            <Route  exact  path="/" render={(props) => <AttendanceTemplate {...props} user={loggedUser} />} />
+            <Route 
+              exact 
+              path="/calendar" 
+              render={(props) => 
+                <AttendanceTemplate {...props} user={loggedUser} component={Calendar}  />} 
+            />
+            <Route 
+              exact 
+              path="/" 
+              render={(props) => <AttendanceTemplate {...props} user={loggedUser} />} 
+            />
          
           </Switch>
         </div>

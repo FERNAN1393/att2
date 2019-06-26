@@ -18,9 +18,7 @@ import {
   DropdownItem } from 'reactstrap';
 //import { Redirect } from 'react-router';
 import FeatherIcon from 'feather-icons-react';
-//Attendance files
-import Calendar from '../../containers/calendar/Calendar';
-//CSS files
+//Attendance CSS files
 import '../../resources/css/attendance_template/attendanceTemplate.css';
 
 class AttendanceTemplate extends Component {
