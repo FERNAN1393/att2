@@ -36,8 +36,8 @@ const getEmpCalendarsError = error => ({
 export const getEmpCalendars = sapId => async dispatch => {
     try {
         dispatch(getEmpCalendarsRequest());
-        const calendars = await emulateRequest();
-        //const calendars = await SelectCalendarsBySapId(sapId);
+        //const calendars = await emulateRequest();
+        const calendars = await SelectCalendarsBySapId(sapId);
         if (calendars) {
             dispatch(getEmpCalendarsSuccess(calendars));
         } else {
