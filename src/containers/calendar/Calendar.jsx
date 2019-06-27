@@ -12,6 +12,7 @@ import PopUpLoading from "../../components/pop_up_loading/PopUpLoading";
 //Redux actions
 import {getHolidays} from '../../redux/actions/action.getHolidays';
 import {getEmpCalendars} from '../../redux/actions/action.getEmpCalendars';
+import {postEmpCalendar} from '../../redux/actions/action.postEmpCalendar';
 //Constants
 import {
   MONTHS_LONG,
@@ -47,7 +48,9 @@ class Calendar extends Component {
 
     this.state = {
       calendarEmployee:
-        this.user.role === ADMIN_USER ? null : this.user,
+        this.props.user.role === ADMIN_USER ? null : this.props.user,
+        
+        
       month: null, //Days of month CHANGE
       empCalendarsRegistered: null,//null, //Registered calendars by employee
       isEditableMonth: false,
@@ -64,21 +67,21 @@ class Calendar extends Component {
   /** 
    * @abstract Request for holidays before component is mounted.
    */
-  componentWillMount = async () => {
-    console.log('Get calendars');
-    await this.props.getHolidays();
-    //await this.props.getEmpCalendars();
-    this.updateCalendars();
+  componentWillMount = () => {
+    /*if (this.props.user.role !== "Admin") {
+      this.fillMonth(); 
+    }*/
   };
 
   /** 
    * @abstract Calls component's updateCalendars method
    */
-  componentDidMount = () => {
-    //this.fillMonth();
-    //console.log('Filling');
-    //this.updateCalendars();
-    //this.fillMonth();
+  componentDidMount = async () => {
+    if (this.props.user.role !== ADMIN_USER) {
+      this.updateCalendars();
+    }
+    await this.props.getHolidays();
+    this.fillMonth();
   };
 
   /** 
@@ -143,7 +146,6 @@ class Calendar extends Component {
           calendar => parseInt(calendar.month) === month
         )
       : undefined;
-    console.log('Calendars', currentEmpCalendar);
     let dayType;
     for (let i = 0; i < DAYS_IN_MONTH; i++) {
       dayType = null;
@@ -160,6 +162,7 @@ class Calendar extends Component {
           }
         }
       } else if (this.isHoliday(i + 1, month, year)) {
+        console.log('Is holiday', i+1, month, year);
         dayType = DAY_TYPE["HOLIDAY"];
       }
       monthCalendar.push(
@@ -172,8 +175,6 @@ class Calendar extends Component {
             }
       );
     }
-    console.log('Calendar', monthCalendar);
-
     this.setState({
       isEditableMonth: this.checkIfIsEditableMonth(month, year),
       month: monthCalendar
@@ -330,19 +331,18 @@ class Calendar extends Component {
    * @param {object} employee Represents the actual employee. If not given,
    * the app uses state's calendarEmployee
    */
-  updateCalendars = (employee = this.state.calendarEmployee) => {
-    console.log('Update calendars');
+  updateCalendars = async (employee = this.state.calendarEmployee) => {
     /*this.setState({
       empCalendarsRegistered: null
     });*/
     if (employee !== null) {
+      await this.props.getEmpCalendars(this.props.user.sapId);
       const empCalendar = this.props.empCalendars;
       const registeredCalendars = [];
       const date = new Date();
       const year = date.getFullYear(),
         month = date.getMonth();
-      //CHANGE with real response
-      for (let i = 0; i < Object.keys(empCalendar).length - 1; i++) {
+      for (let i = 0; i < Object.keys(empCalendar).length; i++) {
         registeredCalendars.push(empCalendar[i]);
       }
       this.fillMonth(month, year, registeredCalendars); //Fill with actual month data
@@ -408,27 +408,11 @@ class Calendar extends Component {
         days: days
       };
       
-      const response = await CreateCalendar(calendarPayload);
-      console.log(response);
+      await postEmpCalendar(calendarPayload);
     } else {
       alert("You have to fill all days");
     }
   };
-
-  employeeHasCalendar = calendar => {};
-
-  /*openUserCategory(event) {
-    event.preventDefault();
-    if(event.currentTarget.id == "openModal") {
-       this.setState({
-        modalAppear: true
-      });
-    } else {
-      this.setState({
-        modalAppear: false
-      });
-    }
-  }*/
 
   render = () => {
     let alerts;
@@ -455,13 +439,13 @@ class Calendar extends Component {
       <div className="calendar-container">
         <Row>
           <Col sm="12">
-            <h1 className="h2">Calendar</h1>
+            <h1 className="h2">Shift Calendar</h1>
           </Col>
         </Row>
 
-        {this.user.role === ADMIN_USER ? (
+        {this.props.user.role === ADMIN_USER ? (
           <CalendarAdminControlPanel
-            user={this.user}
+            user={this.props.user}
             calendarUser={this.state.calendarEmployee}
             selectEmployee={this.selectEmployee}
           />
@@ -507,28 +491,28 @@ class Calendar extends Component {
                 </Button>{" "}
               </Col>
             </Row>
-
-            {this.state.uploading || this.props.loading ? (
-              <PopUpLoading
-                className="uploading-modal"
-                isOpen={this.state.uploading || this.props.loading}
-                modalTitle={`${
-                  this.props.loading ? "Loading" : "Submitting"
-                } calendar`}
-              >
-                <div className="calendar-loading">
-                  <img
-                    className="calendar-loading"
-                    src={require("../../resources/img/blue_loading.gif")}
-                    alt="Loading"
-                    style={{ width: "30%", height: "auto" }}
-                  />
-                </div>
-              </PopUpLoading>
-            ) : (
-              <React.Fragment />
-            )}
           </React.Fragment>
+        ) : (
+          <React.Fragment />
+        )}
+
+        {this.state.uploading || this.props.loading ? (
+          <PopUpLoading
+            className="uploading-modal"
+            isOpen={this.state.uploading || this.props.loading}
+            modalTitle={`${
+              this.props.loading ? "Loading" : "Submitting"
+            } calendar`}
+          >
+            <div className="calendar-loading">
+              <img
+                className="calendar-loading"
+                src={require("../../resources/img/blue_loading.gif")}
+                alt="Loading"
+                style={{ width: "30%", height: "auto" }}
+              />
+            </div>
+          </PopUpLoading>
         ) : (
           <React.Fragment />
         )}
@@ -575,18 +559,21 @@ const mapStateToProps = state => {
       });
     }
   }
-  console.log('Loading holidays', holidaysData.loading);
-  console.log('Loading calendars', calendarData.loading);
+  if (calendarData.status && calendarData.status.code === 'ok') {
+    console.log(calendarData.status.message);
+  }
   return {
     holidays: holidaysObj,
-    loading: holidaysData.loading || calendarData.loading,
-    empCalendars: empCalendars ? empCalendars : {}
+    empCalendars: empCalendars ? empCalendars : {},
+    loading: calendarData.loading,
+    user: state.user
   };
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     getHolidays, 
-    getEmpCalendars
+    getEmpCalendars,
+    postEmpCalendar
   }, dispatch);
 
 Calendar.propTypes = {

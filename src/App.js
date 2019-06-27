@@ -83,11 +83,6 @@ class _App extends React.Component{
               render={(props) => 
                 <AttendanceTemplate {...props} user={loggedUser} component={Calendar}  />} 
             />
-            <Route 
-              exact 
-              path="/" 
-              render={(props) => <AttendanceTemplate {...props} user={loggedUser} />} 
-            />
          
           </Switch>
         </div>

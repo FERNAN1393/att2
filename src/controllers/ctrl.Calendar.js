@@ -12,27 +12,24 @@ export function CreateCalendar (month) {
   console.log(month);
   const db = firebase.firestore();
   const fraterCalendar = db.collection(CALENDAR_COLLECTION);
-  return fraterCalendar.doc(month.sapId + "|"+ month.month).set({
-    month
-  }).then(function() {
+  return fraterCalendar.doc(month.sapId + "|"+ month.month).set(month).then(function() {
     return true;
   }).catch(err =>{
     throw err;
   });
 }
 
-/*  Description: 
- *  input: Str key(SapId|month), int day
- *  output: 
+/*  Description: Day 0 equals to first day of month, 30th to 31. Will return Shift code of provided day.
+ *  input: String key(SapId|month), int day
+ *  output: String code
  */
 export function SelectDayCode (key, day) {
   const db = firebase.firestore();
   const fraterCalendar = db.collection(CALENDAR_COLLECTION);
-  return fraterCalendar.doc(key).get()
-  .then(function(month) {
-    
-    //Refactorizar esta funcion. Debe retornar codigo con el que fue marcado el dia pasado como parametro.
-    
+  return fraterCalendar.doc(key).get().then(function(month) {
+    debugger;
+    const daysArray = month._document.proto.fields.month.mapValue.fields.days.arrayValue.values;
+    return daysArray[day - 1].mapValue.fields.value.stringValue;
   }).catch(err =>{
     throw err;
   });

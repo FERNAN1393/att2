@@ -34,7 +34,7 @@ class AttendanceTemplate extends Component {
 
 
   componentWillMount = () => {
-    console.log(this.props.user);
+    //console.log(this.props.user);
   }
   
   handleLogOut = () => {

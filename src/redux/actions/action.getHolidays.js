@@ -4,7 +4,7 @@ import {
     GET_HOLIDAYS_SUCCESS, 
     GET_HOLIDAYS_ERROR 
 } from './../../constants/reduxActions';
-
+import {SelectAllHolidays} from '../../controllers/ctrl.Holiday';
 
 const getHolidaysRequest = () => ({
     type: GET_HOLIDAYS_REQUEST,
@@ -36,7 +36,8 @@ const getHolidaysError = error => ({
 export const getHolidays = () => async dispatch => {
     try {
         dispatch(getHolidaysRequest());
-        const holidays = await emulateRequest();
+        //const holidays = await emulateRequest();
+        const holidays = await SelectAllHolidays();
         if (holidays) {
             dispatch(getHolidaysSuccess(holidays));
         } else {

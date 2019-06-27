@@ -13,9 +13,7 @@ import {HOLIDAY_COLLECTION} from "../constants/Collections.js"
 export function CreateShiftHoliday (holiday) {
   const db = firebase.firestore();
   const fraterHoliday = db.collection(HOLIDAY_COLLECTION);
-  return fraterHoliday.doc(holiday.holidayDate.replace("/", "-")).set({
-    holiday
-  }).then(function() {
+  return fraterHoliday.doc(holiday.holidayDate.replace("/", "-")).set(holiday).then(function() {
     return true;
   }).catch(err =>{
     throw err;
@@ -31,7 +29,7 @@ export function SelectAllHolidays() {
   const db = firebase.firestore();
   const fraterHoliday = db.collection(HOLIDAY_COLLECTION);
   return fraterHoliday.get().then(function(holidays) {
-    let aHolidays = null;
+    let aHolidays = [];
     if(holidays !== undefined && holidays.docs.length > 0)
       holidays.forEach((doc)=>{
         aHolidays.push(doc.data());
@@ -43,20 +41,35 @@ export function SelectAllHolidays() {
 }
 
 /* 
- * Description: This method will select all holidays 
- * input; 
+ * Description: This method will select all holidays matched with String date passed as parameter.
+ * input; String date
  * output: holidays (Array obj) 
  */
-export function SelectHolidaysByDate() {
+export function SelectHolidaysByDate(date) {
   const db = firebase.firestore();
   const fraterHoliday = db.collection(HOLIDAY_COLLECTION);
-  return fraterHoliday.get().then(function(holidays) {
-    let aHolidays = null;
+  return fraterHoliday.where("holidayDate","==",date).get().then(function(holidays) {
+    let aHolidays = [];
     if(holidays !== undefined && holidays.docs.length > 0)
       holidays.forEach((doc)=>{
         aHolidays.push(doc.data());
       });
     return aHolidays;
+  }).catch(err =>{
+      throw err;
+  });
+}
+
+/* 
+ * Description: This method will delete holiday 
+ * input; String date
+ * output: true/err 
+ */
+export function DeleteHoliday(date) {
+  const db = firebase.firestore();
+  const fraterHoliday = db.collection(HOLIDAY_COLLECTION);
+  return fraterHoliday.doc(date.replace("/", "-")).delete().then(function() {
+    return true;
   }).catch(err =>{
       throw err;
   });

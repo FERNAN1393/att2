@@ -8,7 +8,7 @@
 
 /************Calendar**************/
 .calendar-container {
-  height: 90vh;
+  height: calc(90vh - 40px);
 }
 
 .calendar-title {
@@ -41,6 +41,11 @@
 
 /********Calendar month*******/
 .calendar-table-header-cell {
+  /*background: #dee2e6;*/
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
   width: 14%;
 }
 
@@ -136,4 +141,23 @@
 .calendar-loading {
   text-align: center;
   margin: auto;
+}
+
+/***************************Media rules************************************/
+@media only screen and (max-width: 1100px) {
+    .caledar-table-day-cell {
+      height: 80px;
+    }
+  
+    .caledar-table-day-cell {
+      font-size: 18px;
+    }
+  
+    .calendar-day-name {
+      display: none;
+    }
+    
+    .calendar-day-type {
+      font-size: 30px;
+    }
 }
