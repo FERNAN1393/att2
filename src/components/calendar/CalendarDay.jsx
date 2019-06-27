@@ -1,7 +1,7 @@
+//React libraries
 import React from "react";
 import PropTypes from "prop-types";
 import { Row, Col } from "reactstrap";
-import { MONTHS_LONG, DAYS_IN_MONTH, DAY_TYPE } from "../../constants/util";
 
 const CalendarDay = props => {
   const canBeSelected = props.className === "";
@@ -33,12 +33,11 @@ const CalendarDay = props => {
 };
 
 CalendarDay.propTypes = {
-  className: PropTypes.any,
-  dayNum: PropTypes.any,
+  className: PropTypes.string,
+  dayNum: PropTypes.number,
   dayType: PropTypes.object,
   handleClick: PropTypes.func,
-  selected: PropTypes.any,
-  weekDay: PropTypes.any
+  selected: PropTypes.number
 };
 
 export default CalendarDay;

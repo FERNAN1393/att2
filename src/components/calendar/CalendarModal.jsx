@@ -1,3 +1,4 @@
+//React libraries
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
@@ -14,18 +15,17 @@ import {
   DropdownMenu,
   DropdownItem
 } from "reactstrap";
+//Attendance constants
 import { DAY_TYPE, MONTHS } from "../../constants/util";
-//import { mapDate } from "../util";
 
-//toggle closes the modal
 class CalendarModal extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       dropdownOpen: false,
-      selectedType: DAY_TYPE[Object.keys(DAY_TYPE)[0]]
-        //this.props.dayType.symbol !== "" ? this.props.dayType : DAY_TYPE[Object.keys(DAY_TYPE)[0]] 
+      selectedType: //DAY_TYPE[Object.keys(DAY_TYPE)[0]]
+        this.props.dayType.symbol !== "" ? this.props.dayType : DAY_TYPE[Object.keys(DAY_TYPE)[0]] 
     };
 
     this.toggleDropdown = this.toggleDropdown.bind(this);
@@ -87,10 +87,9 @@ class CalendarModal extends Component {
         break;
       }
     }
-    const filteredKeys = Object.keys(DAY_TYPE).filter(key => {
-      if (isWeekendDay) return key;
-      else if (DAY_TYPE[key] !== DAY_TYPE.MORNING_SHIFT) return key;
-    });
+    const filteredKeys = Object.keys(DAY_TYPE).filter(key => 
+      isWeekendDay || DAY_TYPE[key] !== DAY_TYPE.MORNING_SHIFT
+    );
     const dropDownItems = filteredKeys.map(key => {
       return (
         <DropdownItem key={key} onClick={k => this.selectType(key)}>
@@ -155,12 +154,12 @@ class CalendarModal extends Component {
 
 CalendarModal.propTypes = {
   accept: PropTypes.func,
-  days: PropTypes.any,
-  dayType: PropTypes.any,
-  month: PropTypes.any,
+  days: PropTypes.array,
+  dayType: PropTypes.object,
+  isOpen: PropTypes.bool,
+  month: PropTypes.number,
   toggle: PropTypes.func,
-  weekDay: PropTypes.any,
-  year: PropTypes.any
+  year: PropTypes.number
 };
 
 export default CalendarModal;

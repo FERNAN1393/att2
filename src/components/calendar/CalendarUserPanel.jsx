@@ -1,3 +1,4 @@
+//React libraries
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import {
@@ -8,8 +9,8 @@ import {
   Row,
   Col
 } from "reactstrap";
-//import { ChevronDown, ChevronUp } from "react-feather";
 import FeatherIcon from 'feather-icons-react';
+//Attendance constants
 import { MONTHS_LONG } from "../../constants/util";
 
 class CalendarUserPanel extends Component {
@@ -206,12 +207,12 @@ class CalendarUserPanel extends Component {
 }
 
 CalendarUserPanel.propTypes = {
-  registeredCalendars: PropTypes.any,
-  selectedMonth: PropTypes.any,
-  selectedYear: PropTypes.any,
+  registeredCalendars: PropTypes.array,
+  selectedMonth: PropTypes.number,
+  selectedYear: PropTypes.number,
   selectMonth: PropTypes.func,
   selectYear: PropTypes.func,
-  user: PropTypes.any
+  user: PropTypes.object
 };
 
 export default CalendarUserPanel;

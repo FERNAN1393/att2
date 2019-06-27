@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Table } from "reactstrap";
 import PropTypes from "prop-types";
 import CalendarDay from "./CalendarDay";
 import CalendarModal from "./CalendarModal";
-import { WEEK_DAYS, DAY_TYPE } from "../../constants/util";
+import { WEEK_DAYS } from "../../constants/util";
 
 class CalendarMonth extends Component {
   constructor(props) {
@@ -99,9 +99,8 @@ class CalendarMonth extends Component {
         </th>
       );
     });
-    const dayRows = [];
     
-    // Passing as classname a non-empty string to CalendarDay will be enough
+    const dayRows = [];
     for (let i = 0, j = 0; i < totalDays + monthDay; i += 7) {
       dayRows.push(
         <tr key={i} className="calendar-table-row">
@@ -118,9 +117,6 @@ class CalendarMonth extends Component {
                 <CalendarDay
                   className={className}
                   key={`d-${index}`}
-                  weekDay={
-                    i + index >= monthDay && i + index < totalDays + monthDay ? day : WEEK_DAYS[0]
-                  }
                   dayNum={j + 1}
                   dayType={this.props.monthTypes[j++]}
                   selected={this.state.selectedDays.find(day => day === j)}
@@ -134,7 +130,7 @@ class CalendarMonth extends Component {
       );
     }
     return (
-      <React.Fragment>
+      <Fragment>
         <Table bordered responsive style={{ height: "500px", overflow: "hidden" }}>
           <thead>
             <tr>{headersDays}</tr>
@@ -152,21 +148,20 @@ class CalendarMonth extends Component {
             accept={this.setDayType}
           />
         ) : (
-          <div />
+          <Fragment />
         )}
-      </React.Fragment>
+      </Fragment>
     );
   }
 }
 
 CalendarMonth.propTypes = {
-  holidays: PropTypes.any,
   isNonWorkableDay: PropTypes.func,
-  month: PropTypes.any,
-  monthTypes: PropTypes.any,
-  isPastMonth: PropTypes.any,
+  month: PropTypes.number,
+  monthTypes: PropTypes.array,
+  isPastMonth: PropTypes.bool,
   setDayType: PropTypes.func,
-  year: PropTypes.any
+  year: PropTypes.number
 };
 
 export default CalendarMonth;

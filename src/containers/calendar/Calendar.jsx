@@ -468,7 +468,6 @@ class Calendar extends Component {
             <Row className="calendar-month-container">
               <Col sm="12">
                 <CalendarMonth
-                  holidays={this.props.holidays}
                   isNonWorkableDay={this.isNonWorkableDay}
                   month={this.state.selectedMonth}
                   monthTypes={this.state.month}

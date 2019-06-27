@@ -86,6 +86,11 @@
   font-size: 36px;
 }
 
+.caledar-table-day-cell.SUS
+.calendar-day-type {
+  font-size: 24px;
+}
+
 .caledar-table-day-cell.S {
   color: #00f;
 }
@@ -144,20 +149,28 @@
 }
 
 /***************************Media rules************************************/
+@media only screen and (max-width: 1400px) {
+  .caledar-table-day-cell.SUS
+  .calendar-day-type {
+    font-size: 20px;
+  }
+
+}
+
 @media only screen and (max-width: 1100px) {
-    .caledar-table-day-cell {
-      height: 80px;
-    }
+  .caledar-table-day-cell {
+    height: 80px;
+  }
   
-    .caledar-table-day-cell {
-      font-size: 18px;
-    }
+  .caledar-table-day-cell {
+    font-size: 18px;
+  }
   
-    .calendar-day-name {
-      display: none;
-    }
-    
-    .calendar-day-type {
-      font-size: 30px;
-    }
+  .calendar-day-name {
+    display: none;
+  }
+  
+  .calendar-day-type {
+    font-size: 30px;
+  }
 }
