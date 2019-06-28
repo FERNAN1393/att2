@@ -8,7 +8,6 @@ import { bindActionCreators } from 'redux';
 import { signInUser } from '../redux/actions/action.signIn';
 import { Error } from '../components';
 import ForgotPass from './ForgotPass';
-
 const mapDispatchToProps = (dispatch) => bindActionCreators({ signInUser}, dispatch);
 const mapStateToProps = (state, props) => (state);
 const styles ={
