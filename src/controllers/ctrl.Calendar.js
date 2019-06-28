@@ -9,6 +9,7 @@ import {CALENDAR_COLLECTION} from "../constants/Collections.js"
  *  output: true/err
  */
 export function CreateCalendar (month) {
+  console.log(month);
   const db = firebase.firestore();
   const fraterCalendar = db.collection(CALENDAR_COLLECTION);
   return fraterCalendar.doc(month.sapId + "|"+ month.month).set(month).then(function() {

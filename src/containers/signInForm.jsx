@@ -49,7 +49,7 @@ class _SignInForm extends Component {
      const credentials = { email , psw };
      const { success, errorMessage } = await this.props.signInUser(credentials);
       if(success)
-        this.props.history.push('/'); //redirect to aplication home 
+        this.props.history.push('/calendar'); //redirect to aplication home 
        else
         this.setState ({ errorDescription: errorMessage }); 
     }
