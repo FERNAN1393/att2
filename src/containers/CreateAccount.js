@@ -38,7 +38,7 @@ class CreateAccount extends Component {
             password: '',
             passwordError: '',
             errorDescription : '',
-            error: '',
+            error: false,
             redirect: false,
             users: {},
             modal: true,
@@ -202,30 +202,10 @@ class CreateAccount extends Component {
     if ( this.state.sapID.length < 8) {
       isError = true;
       errors.sapIDError = "Sap id must have 8 characters";
-    }
-    if (this.state.batch === "") {
-      isError = true;
-      errors.batchError = "Please write your Batch";
-    }
-    if (this.state.projectName === "") {
-      isError = true;
-      errors.projectNameError = "Please write your Project Name";
-    }
-    if (this.state.projectKey === "") {
-      isError = true;
-      errors.projectKeyError = "Please write your Project Key";
-    }
+    }  
     if (this.state.password ==="") {
       isError = true;
       errors.passwordError = "Please write your Password";
-    }
-    if (this.state.client ==="") {
-      isError = true;
-      errors.clientErr = "Please write your Client";
-    }
-    if (this.state.workLocation ==="") {
-      isError = true;
-      errors.workLocationErr = "Please write your Work Location";
     }
     
     if (this.state.securyQestion ==="") {
@@ -281,7 +261,14 @@ class CreateAccount extends Component {
                 this.setState({
                   modalAppear : true,
                 });
-              } 
+              }
+            else
+            {
+              this.setState ({
+                error: true,
+                errorDescription: "UserName already Exits"
+                }); 
+            }
     }
 
   render(){
