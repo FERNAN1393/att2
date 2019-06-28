@@ -9,78 +9,66 @@ import {saveNewUserAction} from '../redux/actions/action.createAccount';
 import {ROLE_USER} from '../constants/Collections';
 
 class CreateAccount extends Component {
-  
   constructor(){
     super();
-      this.state = {
-            name: '',
-            nameError: '',
-            email: '',
-            emailError: '',
-            reportingManager: '',
-            reportingManagerError: '',
-            sapID: '',
-            sapIDError: '',
-            batch: '',
-            batchError: '',
-            projectName: '',
-            projectNameError: '',
-            projectKey: '',
-            projectKeyError: '',
-            /**/
-            employeeStatus: "LTL-long term",
-            employeeStatusErr: "",
-            workLocation:"",
-            workLocationErr:"",
-            client: "",
-            clientErr: "",
-            /**/
-            password: '',
-            passwordError: '',
-            errorDescription : '',
-            error: false,
-            redirect: false,
-            users: {},
-            modal: true,
-            modalAppear : false,
-            securyQestionArr: [
-                {"id" : 0, "question" : "What is the first name of the person you first kissed?" },
-                {"id" : 1, "question" : "What was the name of your elementary / primary school?"},
-                {"id" : 2, "question" : "What time of the day were you born? (hh:mm)"},
-                {"id" : 3, "question" : "In what year was your father born?"},
-                {"id" : 4, "question" : "What is your favorite movie?"},
-              
-                {"id" : 5, "question" : "What is your pet’s name?"},
-                {"id" : 6, "question" : "What was your childhood nickname?"},
-                {"id" : 7, "question" : "What is the name of your favorite childhood friend?"},
-                {"id" : 8, "question" : "In what city or town did your mother and father meet?"},
-                {"id" : 9, "question" : "What was your favorite sport in high school?"}],
-            secureQuestions : ["What is the first name of the person you first kissed?","What is your pet’s name?"],
-            securyQestionError: '',
-            securyAnswer: ["",""],
-            securyAnswerError: '',
-            securyAnswerError2: ''
-        }; 
-
-        
-        this.handleChange = this.handleChange.bind(this);
-        this.handleChangeAnswers1 = this.handleChangeAnswers1.bind(this);
-        this.handleChangeAnswers2 = this.handleChangeAnswers2.bind(this);
-        this.handleRedirect = this.handleRedirect.bind(this);
-        this.toggle = this.toggle.bind(this);
-        this.clearForm = this.clearForm.bind(this);
-        this.handleSelect = this.handleSelect.bind(this);
-        this.handleOnChange = this.handleOnChange.bind(this);
+    this.state = {
+      name: '',
+      nameError: '',
+      email: '',
+      emailError: '',
+      reportingManager: '',
+      reportingManagerError: '',
+      sapID: '',
+      sapIDError: '',
+      batch: '',
+      batchError: '',
+      projectName: '',
+      projectNameError: '',
+      projectKey: '',
+      projectKeyError: '',
+      /**/
+      employeeStatus: "LTL-long term",
+      employeeStatusErr: "",
+      workLocation:"",
+      workLocationErr:"",
+      client: "",
+      clientErr: "",
+      /**/
+      password: '',
+      passwordError: '',
+      errorDescription : undefined,
+      error: false,
+      redirect: false,
+      users: {},
+      modal: true,
+      modalAppear : false,
+      securyQestionArr: [
+      {"id" : 0, "question" : "What is the first name of the person you first kissed?" },
+      {"id" : 1, "question" : "What was the name of your elementary / primary school?"},
+      {"id" : 2, "question" : "What time of the day were you born? (hh:mm)"},
+      {"id" : 3, "question" : "In what year was your father born?"},
+      {"id" : 4, "question" : "What is your favorite movie?"},
+      
+      {"id" : 5, "question" : "What is your pet’s name?"},
+      {"id" : 6, "question" : "What was your childhood nickname?"},
+      {"id" : 7, "question" : "What is the name of your favorite childhood friend?"},
+      {"id" : 8, "question" : "In what city or town did your mother and father meet?"},
+      {"id" : 9, "question" : "What was your favorite sport in high school?"}],
+      secureQuestions : ["What is the first name of the person you first kissed?","What is your pet’s name?"],
+      securyQestionError: '',
+      securyAnswer: ["",""],
+      securyAnswerError: '',
+      securyAnswerError2: ''
+    }; 
   }
-  
 
-  toggle() {
+  toggle = () => {
     this.setState({
       modal: true
     });
   }
   
-  handleChange(e) {
+  handleChange = e => {
       let target = e.target;
       let value = target.type === 'checkbox' ? target.checked : target.value;
       let name = target.name;     
@@ -89,7 +77,7 @@ class CreateAccount extends Component {
       });
   }
   
-  handleChangeAnswers1(e) {
+  handleChangeAnswers1 = e => {
     const target = e.target.value;
     let arrTemp = this.state.securyAnswer;
     arrTemp[0] = target;
@@ -98,7 +86,7 @@ class CreateAccount extends Component {
     });
   }
   
-  handleChangeAnswers2(e) {
+  handleChangeAnswers2 = e => {
     const target = e.target.value;
     let arrTemp = this.state.securyAnswer;
     arrTemp[1] = target;
@@ -107,7 +95,7 @@ class CreateAccount extends Component {
     });
   }
   
-  handleSelect(e) {
+  handleSelect = e => {
     const target = e.target.value ;
     let arrTemp = this.state.secureQuestions;
     if(target < 5){
@@ -120,190 +108,156 @@ class CreateAccount extends Component {
     });
   }
   
-  // toggle() {
-  //   this.setState({
-  //     modal: !this.state.modal
-  //   });
-  // }
-  
-  handleRedirect(){
+  handleRedirect = () =>{
     this.setState({
       redirect : true
     });
     this.clearForm();
   }
 
-  validateNumbers(e) {
+  validateNumbers = e => {
     const re = /^[a-zA-Z\s]*$/g;
     if (!re.test(e.key)) {
       e.preventDefault();
     }
   };
   
-  clearForm(){
-     this.setState({
-            name: '',
-            nameError: '',
-            email: '',
-            emailError: '',
-            reportingManager: '',
-            reportingManagerError: '',
-            sapID: '',
-            sapIDError: '',
-            batch: '',
-            batchError: '',
-            projectName: '',
-            projectNameError: '',
-            projectKey: '',
-            projectKeyError: '',
-            employeeStatus: "LTL-long term",
-            employeeStatusErr: "",
-            workLocation:"",
-            workLocationErr:"",
-            client: "",
-            clientErr: "",
-            password: '',
-            passwordError: '',
-            secureQuestions : ["",""],
-            securyQestionError: '',
-            securyAnswer: ["",""],
-            securyAnswerError: '',
-            securyAnswerError2: ''
-           })
+  clearForm = () => {
+    this.setState({
+      name: '',
+      nameError: '',
+      email: '',
+      emailError: '',
+      reportingManager: '',
+      reportingManagerError: '',
+      sapID: '',
+      sapIDError: '',
+      batch: '',
+      batchError: '',
+      projectName: '',
+      projectNameError: '',
+      projectKey: '',
+      projectKeyError: '',
+      employeeStatus: "LTL-long term",
+      employeeStatusErr: "",
+      workLocation:"",
+      workLocationErr:"",
+      client: "",
+      clientErr: "",
+      password: '',
+      passwordError: '',
+      secureQuestions : ["",""],
+      securyQestionError: '',
+      securyAnswer: ["",""],
+      securyAnswerError: '',
+      securyAnswerError2: ''
+    });
   }
   
-  validate =()=>{
-    let isError = false;
-    const errors ={};
+  validate = () => {
     if (this.state.name === "") {
-      isError = true;
-      errors.nameError = "Please write your Name";
+      throw new Error("Please write your Name");
     }
     if (this.state.email.indexOf("@") === -1) {
-      isError = true;
-      errors.emailError = "Required valid Email";
+      throw new Error("Required valid Email");
     }
     if(!this.state.email.endsWith("@hcl.com")) {
-      isError = true;
-      errors.emailError = "Only HCL emails are allowed";
+      throw new Error("Only HCL emails are allowed");
     }
     if (this.state.reportingManager === "") {
-      isError = true;
-      errors.reportingManagerError = "Please write your Reporting Manager's ID";
+      throw new Error("Please write your Reporting Manager's ID");
     }
     if ( this.state.reportingManager.length < 8) {
-      isError = true;
-      errors.reportingManagerError = "Sap id must have 8 characters";
+      throw new Error("Sap id must have 8 characters");
     }
     if (this.state.sapID === "" ) {
-      isError = true;
-      errors.sapIDError = "Please enter your SapID";
+      throw new Error("Please enter your SapID");
     }
     if ( this.state.sapID.length < 8) {
-      isError = true;
-      errors.sapIDError = "Sap id must have 8 characters";
+      throw new Error("Sap id must have 8 characters");
     }  
     if (this.state.password ==="") {
-      isError = true;
-      errors.passwordError = "Please write your Password";
+      throw new Error("Please write your Password");
     }
-    
     if (this.state.securyQestion ==="") {
-      isError = true;
-      errors.securyQestionError = "Please write your Security Question";
+      throw new Error("Please write your Security Question");
     }
     if (this.state.securyAnswer[0].length < 4 ) {
-      isError = true;
-      errors.securyAnswerError = "Please write your Security Answer properly, must be at least 4 digit long.";
+      throw new Error("Please write your Security Answer properly, must be at least 4 digit long.");
     }
     if (this.state.securyAnswer[1].length < 4 ) {
-      isError = true;
-      errors.securyAnswerError2 = "Please write your Security Answer properly, must be at least 4 digit long.";
+      throw new Error("Please write your Security Answer properly, must be at least 4 digit long.");
     }
-    this.setState({
-      ...this.state,
-      ...errors
-    });
-    return isError
+    return true
   }
-  
-   handleOnChange(event) {
+    
+  handleOnChange = event => {
     this.setState({
       employeeStatus : event.currentTarget.innerText
     });
   }
   
-    onSubmit = async e =>  {
-        e.preventDefault();
-            this.validate();
-            let user = {
-                batchNumber: this.state.batch ,
-                email: this.state.email,
-                password: this.state.password,
-                employeeName: this.state.name,
-                projectCode: this.state.projectKey,
-                projectName: this.state.projectName,
-                reportingManager: this.state.reportingManager,
-                client: this.state.client,
-                workLocation: this.state.workLocation,
-                employeeStatus: this.state.employeeStatus,
-                role: ROLE_USER,
-                sapId: this.state.sapID,
-                secureQuestions: this.state.secureQuestions,
-                secureAnswers: this.state.securyAnswer
-            }
-            
-            console.log("old redux state", this.props.newUserObj)
-            await this.props.saveNewUserAction(user);
-            console.log("new redux state", this.props.newUserObj)
-            if(this.props.newUserObj.status === 'success')
-              {
-                this.setState({
-                  modalAppear : true,
-                });
-              }
-            else
-            {
-              this.setState ({
-                error: true,
-                errorDescription: "UserName already Exits"
-                }); 
-            }
+  onSubmit = async e =>  {
+    e.preventDefault();
+    try{
+      this.validate();
+      let user = {
+        batchNumber: this.state.batch ,
+        email: this.state.email,
+        password: this.state.password,
+        employeeName: this.state.name,
+        projectCode: this.state.projectKey,
+        projectName: this.state.projectName,
+        reportingManager: this.state.reportingManager,
+        client: this.state.client,
+        workLocation: this.state.workLocation,
+        employeeStatus: this.state.employeeStatus,
+        role: ROLE_USER,
+        sapId: this.state.sapID,
+        secureQuestions: this.state.secureQuestions,
+        secureAnswers: this.state.securyAnswer
+      };
+    await this.props.saveNewUserAction(user);
+    this.setState({modalAppear : true});
+    }catch(error){
+      this.setState ({
+        error: true,
+        errorDescription: error.message
+      }); 
     }
+  }
 
   render(){
-    const error = this.state.error;
-    let resultado;
+    const resultado = this.state.error ? <Error message ={this.state.errorDescription}/> : null;
+    
     if (this.state.redirect) {
          return <Redirect push to="/" />;
     }
-    if(error) {
-        resultado = <Error mensaje ={this.state.errorDescription}/>
-    } 
 
     let margin = {
       marginLeft : "5%"
-    }
+    };
     
     let textW = {
       width:"50%"
-    }
+    };
     
      let textW45 = {
       width:"45%",
       marginLeft : "5%"
-    }
+    };
     
     const padding = {
       paddingLeft: "51%"
-    }
+    };
     
     let questionArr = [], questionArr2 = [];
-     this.state.securyQestionArr.forEach(element =>{
-        element.id < 5 ?
-          questionArr.push(<option value={element.id}>{element.question}</option>):
-          questionArr2.push(<option value={element.id}>{element.question}</option>);
+    this.state.securyQestionArr.forEach(element =>{
+      element.id < 5 ?
+      questionArr.push(<option key={element.id} value={element.id}>{element.question}</option>):
+      questionArr2.push(<option key={element.id} value={element.id}>{element.question}</option>);
     });
+    
     return (
       <div >
         <Modal isOpen={this.state.modalAppear} toggle={this.toggle}>
@@ -316,9 +270,10 @@ class CreateAccount extends Component {
             <Button color="primary" onClick={this.handleRedirect}>Continue</Button>
           </ModalFooter>
         </Modal>
-      <form>
-        <h2 className ="CreateAccount">Sign Up</h2>
-        <div className="container">
+        <form>
+          <h2 className ="CreateAccount">Sign Up</h2>
+          <div className="container">
+          
             <p>Please fill in this form to create an account.</p>
             
             <label htmlFor="name"><b>Name</b></label>
@@ -328,111 +283,109 @@ class CreateAccount extends Component {
             <label htmlFor="email"><b>Email</b></label>
             <div className="MessageError">{this.state.emailError}</div>
             <input type="text" placeholder="Enter your Email" value={this.state.email} onChange={this.handleChange} name="email" />
-
+            
             <label htmlFor="reportingManager"><b>Reporting Manager</b></label>
             <div className="MessageError">{this.state.reportingManagerError}</div>
             <input type="number" placeholder="Enter your RM ID" value={this.state.reportingManager} onChange={this.handleChange} name="reportingManager"/>
-            
-            
+              
+              
             <label htmlFor="sapID"><b>SAPID</b></label>
             <label id="batch" htmlFor="bacth"><b>Batch Number</b></label>
             <div className="MessageError">{this.state.sapIDError}</div>
             <div className="MessageErrors">{this.state.batchError}</div>
+            
             <div className="clearfix">
               <input type="number" id="sapid" placeholder="Enter your SAPID" value={this.state.sapID} onChange={this.handleChange} name="sapID" />
               <input type="number" id="batchs"placeholder="Enter your Batch" value={this.state.batch} onChange={this.handleChange} name="batch" style={margin}/>
             </div>
-            
+              
             <label htmlFor="client"><b>Client</b></label>
             <label style={padding} htmlFor="workLocation" id="lblworkLocation"><b>Work Location</b></label>
             <div className="MessageError">{this.state.clientErr}</div>
             <div className="MessageErrors">{this.state.employeeStatusErr}</div>
+            
             <div className="clearfix">
               <input style={textW} type="text" id="client" placeholder="Enter your Client" value={this.state.client} onChange={this.handleChange} name="client" />
               <input style={textW45} type="text" id="workLocation" placeholder="Enter your work location" value={this.state.workLocation} onChange={this.handleChange} name="workLocation"  />
             </div>
-            
+              
             <label htmlFor="projectName"><b>Project Name</b></label>
             <label id="projectKey" htmlFor="projectkey"><b>Project Key</b></label>
             <div className="MessageError">{this.state.projectNameError}</div>
-            <div className="MessageErrors">{this.state.projectKeyError}</div>
+            <div className="MessageErrors">{this.state.projectKeyError}</div> 
+            
             <div className="clearfix">
-            <input type="projectName" placeholder="Enter your Project Name" value={this.state.projectName} onChange={this.handleChange} name="projectName" />
-            <input type="text" id="projectkey" placeholder="Enter your Project Key" value={this.state.projectKey} onChange={this.handleChange} name="projectKey" style={margin} />
+              <input type="projectName" placeholder="Enter your Project Name" value={this.state.projectName} onChange={this.handleChange} name="projectName" />
+              <input type="text" id="projectkey" placeholder="Enter your Project Key" value={this.state.projectKey} onChange={this.handleChange} name="projectKey" style={margin} />
             </div>
             
             <label htmlFor="password"><b>Password</b></label>
             <div className="MessageError">{this.state.passwordError}</div>
             <input type="password" className="password" placeholder="Enter Password" value={this.state.password} onChange={this.handleChange} name="password" />
             <div className="clearfix">
-            <label htmlFor="secureQuestions"><b>Security Question(s)</b></label>
-            <div className="MessageError">{this.state.securyQestionError}</div>
-            <br />
-            
-            <FormGroup >
-              <Input type="select" onChange={this.handleSelect}>
-                {questionArr}
-              </Input>
-            </FormGroup>
-            
-            <input type="text" placeholder="Enter your Answer" style={styles.AnswerBox} onChange={this.handleChangeAnswers1} name="securyAnswer1" />
-            <div className="MessageError" style={styles.AnswerErros}>{this.state.securyAnswerError}</div>
-            <FormGroup>
-              <Input type="select" onChange={this.handleSelect}>
-                {questionArr2}
-              </Input>
-            </FormGroup>
-            
-            <input type="text" placeholder="Enter your Answer" style={styles.AnswerBox} onChange={this.handleChangeAnswers2} name="securyAnswer2" />
-            <div className="MessageError" style={styles.AnswerErros} >{this.state.securyAnswerError2}</div>
-            <UncontrolledDropdown name="status" >
-              <DropdownToggle caret>
-                {this.state.employeeStatus}
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem onClick={this.handleOnChange}>LTL-long term</DropdownItem>
-                <DropdownItem onClick={this.handleOnChange}>STL-short term</DropdownItem>
-                <DropdownItem onClick={this.handleOnChange}>Local-nativo</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-            <br/>
-            <br/>
-            
-            <button type="submit" className="FormField__Button mr-20 col-sm-offset-4 col-sm-2 signupbtn" onClick={e => this.onSubmit(e)}>Save</button>
-            <Link to ="/"><button type="button" className="FormField__Button mr-20 col-sm-2 cancelbtn" >Cancel</button></Link> 
+              <label htmlFor="secureQuestions"><b>Security Question(s)</b></label>
+              <div className="MessageError">{this.state.securyQestionError}</div>
+              <br />
+                
+              <FormGroup >
+                <Input type="select" onChange={this.handleSelect}>
+                  {questionArr}
+                </Input>
+              </FormGroup>
+                
+              <input type="text" placeholder="Enter your Answer" style={styles.AnswerBox} onChange={this.handleChangeAnswers1} name="securyAnswer1" />
+              <div className="MessageError" style={styles.AnswerErros}>{this.state.securyAnswerError}</div>
+              <FormGroup>
+                <Input type="select" onChange={this.handleSelect}>
+                  {questionArr2}
+                </Input>
+              </FormGroup>
+              <input type="text" placeholder="Enter your Answer" style={styles.AnswerBox} onChange={this.handleChangeAnswers2} name="securyAnswer2" />
+              <div className="MessageError" style={styles.AnswerErros} >{this.state.securyAnswerError2}</div>
+              
+              <UncontrolledDropdown name="status" >
+                <DropdownToggle caret>
+                  {this.state.employeeStatus}
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem onClick={this.handleOnChange}>LTL-long term</DropdownItem>
+                  <DropdownItem onClick={this.handleOnChange}>STL-short term</DropdownItem>
+                  <DropdownItem onClick={this.handleOnChange}>Local-nativo</DropdownItem>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+              <br/>
+              <br/>
+                
+              <button type="submit" className="FormField__Button mr-20 col-sm-offset-4 col-sm-2 signupbtn" onClick={e => this.onSubmit(e)}>Save</button>
+              <Link to ="/"><button type="button" className="FormField__Button mr-20 col-sm-2 cancelbtn" >Cancel</button></Link> 
             </div>
             {resultado}
-        </div>
-      </form>
-    </div>
-        );
+          </div>
+        </form>
+      </div>
+    );
   }
 }
 
- const styles={
-    AnswerBox:{
-      marginTop: '-10',
-      marginBottom: '-2'
-    },
-    AnswerErros:{
-      paddingTop: '-20',
-      marginBottom: '30'
-    }
+const styles={
+  AnswerBox:{
+    marginTop: '-10',
+    marginBottom: '-2'
+},
+  AnswerErros:{
+    paddingTop: '-20',
+    marginBottom: '30'
   }
+};
 
 function mapStateToProps(state) {
-    return {
-      // 
-      newUserObj: state.saveNewUserReducer
-    };
+  return {
+    newUserObj: state.saveNewUserReducer
+  };
 }
 
 const mapDispatchToProps = ({
-    saveNewUserAction,
+  saveNewUserAction,
 });
-
-
-
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateAccount);

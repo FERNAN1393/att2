@@ -19,7 +19,7 @@ export const CreateAttUser = async(user) => {
     const attUsers = db.collection(USER_COLLECTION);
     const alreadyExist = await attUsers.where("sapId","==",user.sapId).get();
     if(alreadyExist !== undefined && alreadyExist.docs.length > 0)
-        throw "User already Exist";
+        throw new Error("User already Exist");
     return await attUsers.doc(user.sapId).set(user);
   }catch(error){
     throw error;
