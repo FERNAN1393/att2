@@ -8,6 +8,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 //import Admin from "firebase-admin";
 import { FirebaseCon } from "./constants/Collections";
 import { SignInForm } from './containers';
+import  CreateAccount  from './containers/CreateAccount';
 import { connect } from 'react-redux';
 
 import AttendanceTemplate from './components/attendance_template/AttendanceTemplate';
@@ -30,7 +31,7 @@ const admin = {
   employeeStatus: 'Local-nativo',
   secureQuestions: [
     'What is your favorite movie?',
-    'What is your petâ€™s name?'
+    'What is your pet’s name?'
   ],
   secureAnswers: [
     'attendance',
@@ -57,13 +58,11 @@ class _App extends React.Component{
         <div className="App">
           <div className="App__Form" >
           <Switch >
-       
+          <Route path="/CreateAccount" render={(props) => <CreateAccount {...props} data={this.state} />}  />  
           {!loggedUser &&  <Route path='/login' component={SignInForm}  /> }
           {!loggedUser && <Redirect to='/login' /> }
-          
           <Redirect exact from='/login' to='/' /> 
-
-          <Route render={(props) => (
+          <Route render={(props) => (            
           <Switch {...props}>
              <Route  exact  path="/" render={(props) => <AttendanceTemplate {...props} user={this.state.user} />} />
           </Switch>
