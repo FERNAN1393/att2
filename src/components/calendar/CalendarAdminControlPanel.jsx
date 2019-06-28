@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Alert, Button, Row, Col } from "reactstrap";
-import CalendarSearchEmpModal from "./CalendarSearchEmpModal";
+import CalendarSearchEmpModal from "../../containers/calendar/CalendarSearchEmpModal";
 
 import "../../resources/css/calendar/calendarAdminControlPanel.css";
 
@@ -12,17 +12,15 @@ class CalendarAdminControlPanel extends Component {
     this.state = {
       modalOpen: false
     };
-
-    this.toggleModal = this.toggleModal.bind(this);
   }
 
-  toggleModal() {
+  toggleModal = () => {
     this.setState({
       modalOpen: !this.state.modalOpen
     });
   }
 
-  render() {
+  render = () => {
     return (
       <div className="calendar-admin-panel-container">
         <Row>
@@ -62,8 +60,9 @@ class CalendarAdminControlPanel extends Component {
 }
 
 CalendarAdminControlPanel.propTypes = {
-  calendarUser: PropTypes.any,
-  user: PropTypes.any
+  calendarUser: PropTypes.object,
+  selectEmployee: PropTypes.func,
+  user: PropTypes.object
 };
 
 export default CalendarAdminControlPanel;

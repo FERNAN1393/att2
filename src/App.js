@@ -15,58 +15,14 @@ import Calendar from './containers/calendar/Calendar';
 
 const mapStateToProps = ({user}) => ({user});
 
-/*const admin = {
-  projectName: 'Attendance ',
-  projectCode: '001',
-  reportingManager: '12345678',
-  sapId: '99999999',
-  batchNumber: '000',
-  employeeName: 'Admin',
-  email: 'admin@hcl.com',
-  password: 'admin',
-  role: '1',
-  client: 'HCL',
-  workLocation: 'Vista Acueducto',
-  employeeStatus: 'Local-nativo',
-  secureQuestions: [
-    'What is your favorite movie?',
-    'What is your pet’s name?'
-  ],
-  secureAnswers: [
-    'attendance',
-    'attendance'
-  ],
-  status: 'active'
-};
-const user = {
-  projectName: 'USAA EIS MCA Mexico',
-  projectCode: 'C/140685',
-  reportingManager: '51477851',
-  sapId: '51643140',
-  batchNumber: '302',
-  employeeName: 'SIMON PEDRO GUERRERO AGUILAR',
-  email: 'Simon.Aguilar@hcl.com',
-  role: '2',
-  client: 'USAA',
-  status: 'active'
-};*/
-
 class _App extends React.Component{
    constructor(props) {
         super(props); 
         firebase.initializeApp(FirebaseCon);
-      
-        /*this.state = {
-          username: '',
-          password: '',
-          user: admin
-        };*/
     }
   
   render = () => {
     const { user: loggedUser } = this.props; 
-    console.log(this.props);
-    const redirectTo = loggedUser && loggedUser.role === 'admin' ? '/upload' : '/calendar';
     return (
       <div className="App">
         <div className="App__Form" >
@@ -75,14 +31,15 @@ class _App extends React.Component{
             {!loggedUser && <Route path='/login' component={SignInForm}  /> }
             {!loggedUser && <Redirect to='/login' /> }
             
-            <Redirect exact from='/login' to={redirectTo} /> 
-    
-            <Route 
-              exact 
-              path="/calendar" 
-              render={(props) => 
-                <AttendanceTemplate {...props} user={loggedUser} component={Calendar}  />} 
-            />
+            <Redirect exact from="/login" to="/" /> 
+              
+            <AttendanceTemplate user={loggedUser}>
+              <Route 
+                exact 
+                path="/calendar" 
+                component={Calendar}
+              />
+            </AttendanceTemplate>
          
           </Switch>
         </div>

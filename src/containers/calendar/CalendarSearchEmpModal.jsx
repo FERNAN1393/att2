@@ -1,4 +1,7 @@
-import React, { Component } from "react";
+//React libraries
+import React, { Component, Fragment } from "react";
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import PropTypes from "prop-types";
 import {
   Alert,
@@ -14,7 +17,9 @@ import {
   Col,
   Table
 } from "reactstrap";
-//import { get } from "../axios/";
+//Redux actions
+import {getAllEmployees} from '../../redux/actions/action.getAllEmployees';
+//Attendance constants
 import { TOTAL_EMPS_PER_PAGE, GET_EMPLOYEES_URL } from "../../constants/util";
 
 import "../../resources/css/calendar/calendarSearchEmpModal.css";
@@ -25,7 +30,6 @@ class CalendarSearchEmpModal extends Component {
 
     this.state = {
       currentPage: 1,
-      employees: [],
       filterText: "",
       filteredEmployees: [],
       selectedEmployee: null,
@@ -35,7 +39,12 @@ class CalendarSearchEmpModal extends Component {
     };
   }
   
-  componentWillMount = () => {
+  componentWillMount = async () => {
+    await this.props.getAllEmployees();
+    this.filterAndSortEmployees(
+      this.state.filterText,
+      this.state.sortingOption
+    );
     /*get(GET_EMPLOYEES_URL)
         .then(res =>{
           const employees = res.data ? res.data : [];
@@ -55,7 +64,7 @@ class CalendarSearchEmpModal extends Component {
    * @param {string} srotingOption String wihch determines how the employees are going to be sorted.
    */
   filterAndSortEmployees = (filterText, sortingOption) => {
-    const employeesArr = this.state.employees ? this.state.employees : [];
+    const employeesArr = this.props.employees ? this.props.employees : [];
     const sortedEmployees = employeesArr.sort((emp1, emp2) => {
       switch (sortingOption) {
         case "name":
@@ -249,7 +258,7 @@ class CalendarSearchEmpModal extends Component {
                 <Alert color="warning">You have to select an employee</Alert>
               </Col>
             ) : (
-              <React.Fragment />
+              <Fragment />
             )}
           </Row>
         </ModalHeader>
@@ -301,7 +310,7 @@ class CalendarSearchEmpModal extends Component {
             </Col>
           </Row>
 
-          <Row>
+          <Row className="calendar-search-table">
             <Table bordered responsive>
               <thead>
                 <tr>
@@ -344,10 +353,22 @@ class CalendarSearchEmpModal extends Component {
   };
 }
 
+
+const mapStateToProps = state => {
+  const employeesData = state.calendar;
+  return {
+    employees: employeesData.employees
+  };
+}
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    getAllEmployees
+}, dispatch);
+
 CalendarSearchEmpModal.propTypes = {
   isOpen: PropTypes.any,
   selectEmployee: PropTypes.func,
   toggle: PropTypes.func
 };
 
-export default CalendarSearchEmpModal;
+export default connect(mapStateToProps, mapDispatchToProps)(CalendarSearchEmpModal);

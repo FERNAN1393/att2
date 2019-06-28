@@ -14,15 +14,19 @@ class CalendarMonth extends Component {
       modalOpen: false,
       keyDown: undefined
     };
-
-    this.selectDay = this.selectDay.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
-    this.handleSpecialKeyPress = this.handleSpecialKeyPress.bind(this);
-    this.handleSpecialKeyRelease = this.handleSpecialKeyRelease.bind(this);
-    this.setDayType = this.setDayType.bind(this);
   }
 
-  selectDay(dayNum) {
+  componentDidMount = () => {
+    document.addEventListener("keydown", this.handleSpecialKeyPress, false);
+    document.addEventListener("keyup", this.handleSpecialKeyRelease, false);
+  }
+
+  componentWillUnmount = () => {
+    document.removeEventListener("keydown", this.handleSpecialKeyPress, false);
+    document.removeEventListener("keyup", this.handleSpecialKeyRelease, false);
+  }
+
+  selectDay = dayNum => {
     if (this.state.keyDown === "Shift") {
       if (this.state.selectedDays.length > 0) {
         let selectedDays;
@@ -47,7 +51,7 @@ class CalendarMonth extends Component {
     } else this.setState({ selectedDays: [dayNum], modalOpen: true });
   }
 
-  handleSpecialKeyPress(event) {
+  handleSpecialKeyPress = event => {
     if (
       (event.shiftKey && this.state.keyDown !== "Shift") ||
       (event.ctrlKey && this.state.keyDown !== "Control")
@@ -58,7 +62,7 @@ class CalendarMonth extends Component {
     }
   }
 
-  handleSpecialKeyRelease() {
+  handleSpecialKeyRelease = () => {
     if (this.state.keyDown === "Shift")
       this.setState({
         keyDown: undefined
@@ -70,26 +74,16 @@ class CalendarMonth extends Component {
       });
   }
 
-  toggleModal() {
+  toggleModal = () => {
     this.setState({ modalOpen: false, selectedDays: [] });
   }
 
-  setDayType(type) {
+  setDayType = type => {
     this.props.setDayType(this.state.selectedDays, type);
     this.toggleModal();
   }
 
-  componentDidMount() {
-    document.addEventListener("keydown", this.handleSpecialKeyPress, false);
-    document.addEventListener("keyup", this.handleSpecialKeyRelease, false);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleSpecialKeyPress, false);
-    document.removeEventListener("keyup", this.handleSpecialKeyRelease, false);
-  }
-
-  render() {
+  render = () => {
     const totalDays = new Date(this.props.year, this.props.month + 1, 0).getDate();
     const monthDay = new Date(this.props.year, this.props.month, 1).getDay();
     const headersDays = WEEK_DAYS.map((day, index) => {

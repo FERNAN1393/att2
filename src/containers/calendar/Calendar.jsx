@@ -1,3 +1,6 @@
+/**
+ * Root component that gives calendar functionalities to Attendance users
+ */
 //React libraries
 import React, { Component } from "react";
 import { bindActionCreators } from 'redux';
@@ -573,7 +576,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     getHolidays, 
     getEmpCalendars,
     postEmpCalendar
-  }, dispatch);
+}, dispatch);
 
 Calendar.propTypes = {
   user: PropTypes.object

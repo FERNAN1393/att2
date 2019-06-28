@@ -1,5 +1,5 @@
 .calendar-search-container {
-  height: 50vh;
+  height: 55vh;
   padding: 2% 5% 0 5% !important;
 }
 
@@ -14,6 +14,11 @@
   border: 1px solid #dee2e6;
   background: white;
   padding: 10px;
+}
+
+.calendar-search-table {
+  font-size: 14px;
+  /*height: 400px;*/
 }
 
 .calendar-search-emp-row {
@@ -45,6 +50,9 @@
 
 .calendar-search-pagination {
   margin: auto;
+  position: absolute;
+  left: 40%;
+  top: 48vh;
 }
 
 .calendar-page-active {

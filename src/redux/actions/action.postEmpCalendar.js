@@ -38,6 +38,8 @@ const postEmpCalendarsError = error => ({
 /*
 * @abstract Action that requests all employee calendars from database, 
 * and dispatch actions depending on request state
+* @param {object} calendar An object that contains all the data regarding the 
+* employee's calendar that is going to be submitted to database.
 */
 export const postEmpCalendar = calendar => async dispatch => {
     try {

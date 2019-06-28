@@ -4,7 +4,7 @@
  */
 //React libraries
 import React, { Component } from 'react';
-import { NavLink as Link, Route } from 'react-router-dom';
+import { NavLink as Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Navbar,
@@ -144,9 +144,7 @@ class AttendanceTemplate extends Component {
               </NavItem>
             </Nav>
             <main className="col-md-10">
-              <Route 
-                {...this.props} component={this.props.component}
-              />
+              {this.props.children}
             </main>
           </div>
         </div>

@@ -27,9 +27,6 @@ class CalendarModal extends Component {
       selectedType: //DAY_TYPE[Object.keys(DAY_TYPE)[0]]
         this.props.dayType.symbol !== "" ? this.props.dayType : DAY_TYPE[Object.keys(DAY_TYPE)[0]] 
     };
-
-    this.toggleDropdown = this.toggleDropdown.bind(this);
-    this.selectType = this.selectType.bind(this);
   }
 
   mapDate = date => {
@@ -51,19 +48,19 @@ class CalendarModal extends Component {
     return "";
   }
 
-  toggleDropdown() {
+  toggleDropdown = () => {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
     });
   }
 
-  selectType(key) {
+  selectType = key => {
     this.setState({
       selectedType: DAY_TYPE[key]
     });
   }
 
-  render() {
+  render = () => {
     const detailsStyle = {
       borderLeft: "1px solid #343a40",
       color: "#343a40"
