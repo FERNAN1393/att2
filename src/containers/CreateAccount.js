@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { Error } from '../components';
 import { Button, Modal, FormGroup, ModalBody, ModalFooter, Input, } from 'reactstrap';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 // Redux and actions dependencies
 import { connect } from 'react-redux';
-import {saveNewUserAction} from './../redux/actions/action.createAccount';
-import {ROLE_USER} from './../constants/Collections';
+import {saveNewUserAction} from '../redux/actions/action.createAccount';
+import {ROLE_USER} from '../constants/Collections';
 
 class CreateAccount extends Component {
   
@@ -274,10 +276,23 @@ class CreateAccount extends Component {
             console.log("old redux state", this.props.newUserObj)
             await this.props.saveNewUserAction(user);
             console.log("new redux state", this.props.newUserObj)
-
+            if(this.props.newUserObj.status === 'success')
+              {
+                this.setState({
+                  modalAppear : true,
+                });
+              } 
     }
 
-  render(){ 
+  render(){
+    const error = this.state.error;
+    let resultado;
+    if (this.state.redirect) {
+         return <Redirect push to="/" />;
+    }
+    if(error) {
+        resultado = <Error mensaje ={this.state.errorDescription}/>
+    } 
 
     let margin = {
       marginLeft : "5%"
@@ -302,12 +317,6 @@ class CreateAccount extends Component {
           questionArr.push(<option value={element.id}>{element.question}</option>):
           questionArr2.push(<option value={element.id}>{element.question}</option>);
     });
-    
-    
-    
-    
-    
-
     return (
       <div >
         <Modal isOpen={this.state.modalAppear} toggle={this.toggle}>
@@ -403,8 +412,9 @@ class CreateAccount extends Component {
             <br/>
             
             <button type="submit" className="FormField__Button mr-20 col-sm-offset-4 col-sm-2 signupbtn" onClick={e => this.onSubmit(e)}>Save</button>
-            <button type="button" className="FormField__Button mr-20 col-sm-2 cancelbtn" >Cancel</button>
+            <Link to ="/"><button type="button" className="FormField__Button mr-20 col-sm-2 cancelbtn" >Cancel</button></Link> 
             </div>
+            {resultado}
         </div>
       </form>
     </div>
