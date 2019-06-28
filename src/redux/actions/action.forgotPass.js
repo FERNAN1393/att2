@@ -8,7 +8,7 @@ import {
   REQUEST_SAPID_ERROR
 } from './../../constants/reduxActions';
 // Controllers for actions
-import { ExtractUserBySapId, CreateAttUser } from './../../controllers/ctrl.ShiftUser';
+import { ExtractUserBySapId, UpdateUser } from './../../controllers/ctrl.ShiftUser';
 
 /** --------------------        Getting state manager       -----------------**/
 const gettingRequest = () => {
@@ -62,7 +62,7 @@ export const updateUser = newUser => {
   return async dispatch => {
     dispatch (gettingRequest());
     try {
-      const response = await CreateAttUser(newUser);
+      const response = await UpdateUser(newUser);
         dispatch(sapIdSuccess(response));  
     } catch(error) {
       dispatch(sapIDError(error));

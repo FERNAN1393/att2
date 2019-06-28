@@ -8,7 +8,6 @@ import { bindActionCreators } from 'redux';
 import { signInUser } from '../redux/actions/action.signIn';
 import { Error } from '../components';
 import ForgotPass from './ForgotPass';
-
 const mapDispatchToProps = (dispatch) => bindActionCreators({ signInUser}, dispatch);
 const mapStateToProps = (state, props) => (state);
 const styles ={
@@ -77,9 +76,9 @@ class _SignInForm extends Component {
                 <input type="password" id="password" className="FormField__Input" placeholder="Enter your password" name="psw" value={psw} onChange={this.handleChange} />
                 <br/>
                 <br/>
-                <Link to ="/CreateAccount">Don't you have an account? Create one.</Link>
+                <Link to="/CreateAccount">Don't you have an account? Create one.</Link>
                 <br/>
-                <a href="#" onClick={this.toggleForgotModal}>Forgot password?</a>
+                <Link to="/Login" onClick={this.toggleForgotModal}>Forgot password?</Link>
               </div>
               <div className="FormField"> 
               <button className="FormField__Button mr-20 col-sm-5" onClick={this.handleSubmit}>Sign In</button>
