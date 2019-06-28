@@ -15,6 +15,8 @@ import {
  */
 export const CreateAttUser = async(user) => {
   try{
+    if (user.sapId === "")
+      throw new Error("Please fill all data fields");
     const db = firebase.firestore();
     const attUsers = db.collection(USER_COLLECTION);
     const alreadyExist = await attUsers.where("sapId","==",user.sapId).get();

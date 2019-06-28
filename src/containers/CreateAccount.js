@@ -155,40 +155,58 @@ class CreateAccount extends Component {
   }
   
   validate = () => {
+    let isError = false;
+    const errors ={};
     if (this.state.name === "") {
-      throw new Error("Please write your Name");
+      isError = true;
+      errors.nameError = "Please write your Name";
     }
     if (this.state.email.indexOf("@") === -1) {
-      throw new Error("Required valid Email");
+      isError = true;
+      errors.emailError = "Required valid Email";
     }
     if(!this.state.email.endsWith("@hcl.com")) {
-      throw new Error("Only HCL emails are allowed");
+      isError = true;
+      errors.emailError = "Only HCL emails are allowed";
     }
     if (this.state.reportingManager === "") {
-      throw new Error("Please write your Reporting Manager's ID");
+      isError = true;
+      errors.reportingManagerError = "Please write your Reporting Manager's ID";
     }
     if ( this.state.reportingManager.length < 8) {
-      throw new Error("Sap id must have 8 characters");
+      isError = true;
+      errors.reportingManagerError = "Sap id must have 8 characters";
     }
     if (this.state.sapID === "" ) {
-      throw new Error("Please enter your SapID");
+      isError = true;
+      errors.sapIDError = "Please enter your SapID";
     }
     if ( this.state.sapID.length < 8) {
-      throw new Error("Sap id must have 8 characters");
+      isError = true;
+      errors.sapIDError = "Sap id must have 8 characters";
     }  
     if (this.state.password ==="") {
-      throw new Error("Please write your Password");
+      isError = true;
+      errors.passwordError = "Please write your Password";
     }
+    
     if (this.state.securyQestion ==="") {
-      throw new Error("Please write your Security Question");
+      isError = true;
+      errors.securyQestionError = "Please write your Security Question";
     }
     if (this.state.securyAnswer[0].length < 4 ) {
-      throw new Error("Please write your Security Answer properly, must be at least 4 digit long.");
+      isError = true;
+      errors.securyAnswerError = "Please write your Security Answer properly, must be at least 4 digit long.";
     }
     if (this.state.securyAnswer[1].length < 4 ) {
-      throw new Error("Please write your Security Answer properly, must be at least 4 digit long.");
+      isError = true;
+      errors.securyAnswerError2 = "Please write your Security Answer properly, must be at least 4 digit long.";
     }
-    return true
+    this.setState({
+      ...this.state,
+      ...errors
+    });
+    return isError
   }
     
   handleOnChange = event => {
@@ -199,7 +217,6 @@ class CreateAccount extends Component {
   
   onSubmit = async e =>  {
     e.preventDefault();
-    try{
       this.validate();
       let user = {
         batchNumber: this.state.batch ,
@@ -217,14 +234,20 @@ class CreateAccount extends Component {
         secureQuestions: this.state.secureQuestions,
         secureAnswers: this.state.securyAnswer
       };
-    await this.props.saveNewUserAction(user);
-    this.setState({modalAppear : true});
-    }catch(error){
-      this.setState ({
-        error: true,
-        errorDescription: error.message
-      }); 
-    }
+      await this.props.saveNewUserAction(user);
+        if(this.props.newUserObj.status === 'success')
+          {
+            this.setState({
+              modalAppear : true,
+            });
+          }
+        else
+        {
+          this.setState ({
+            error: true,
+            errorDescription: this.props.newUserObj.error.message
+            }); 
+        }
   }
 
   render(){

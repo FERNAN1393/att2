@@ -8,7 +8,12 @@ import {
   REQUEST_CREATEACCOUNT_ERROR
 } from './../../constants/reduxActions';
 
-const initialState = {};
+const initialState = { 
+    error: {
+        message : "Please fill all data fields"
+    },
+    
+};
 
 export default function saveNewUserReducer(state = initialState, action) {
     switch (action.type) {

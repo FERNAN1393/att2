@@ -45,11 +45,9 @@ const sapIDError = error => {
 /** --------------------            DISPATCHERS             -----------------**/
 export const saveNewUserAction = newUserObj => {
   return async dispatch => {
-    console.log('Action', newUserObj);
     dispatch (gettingRequest());
     try {
       const response = await CreateAttUser(newUserObj);
-      console.log("RESPUESTA",response)
       if( response ){
         dispatch(sapIdSuccess(response));
       }else{
