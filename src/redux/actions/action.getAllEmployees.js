@@ -39,7 +39,6 @@ export const getAllEmployees = sapId => async dispatch => {
         dispatch(getAllEmployeesRequest());
         //const employees = await emulateRequest();
         const employees = await ExtractAllUsers(sapId);
-        console.log('All employees', employees);
         if (employees) {
             dispatch(getAllEmployeesSuccess(employees));
         } else {

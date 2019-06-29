@@ -22,66 +22,37 @@ import {
   DAYS_IN_MONTH,
   EXTRA_DAY_TYPE,
   DAY_TYPE,
-  ADMIN_USER,
-  GET_CALENDAR_URL,
-  UPLOAD_CALENDAR_URL,
-  GET_HOLIDAYS_URL
+  ADMIN_USER
 } from "../../constants/util";
 //Attendance css files
 import "../../resources/css/calendar/calendar.css";
 
-import {CreateCalendar} from '../../controllers/ctrl.Calendar'
-
 class Calendar extends Component {
   constructor(props) {
     super(props);
-    
-    this.user = {
-      projectName: 'USAA EIS MCA Mexico',
-      projectCode: 'C/140685',
-      reportingManager: '51477851',
-      sapId: '51643140',
-      batchNumber: '302',
-      employeeName: 'SIMON PEDRO GUERRERO AGUILAR',
-      email: 'Simon.Aguilar@hcl.com',
-      role: '2',
-      client: 'USAA',
-      status: 'active'
-    };
 
     this.state = {
       calendarEmployee:
         this.props.user.role === ADMIN_USER ? null : this.props.user,
-        
-        
       month: null, //Days of month CHANGE
       empCalendarsRegistered: null,//null, //Registered calendars by employee
       isEditableMonth: false,
-      //selectedMonth: new Date().getMonth() + 1, //Next month
       selectedMonth: new Date().getMonth(), //Actual month
       selectedYear: new Date().getFullYear(),
       alerts: false,
       typeAlert: "",
       modalAppear: false,
-      uploading: false
+      uploading: false,
+      alertIsVisible: false
     };
   }
-
-  /** 
-   * @abstract Request for holidays before component is mounted.
-   */
-  componentWillMount = () => {
-    /*if (this.props.user.role !== "Admin") {
-      this.fillMonth(); 
-    }*/
-  };
 
   /** 
    * @abstract Calls component's updateCalendars method
    */
   componentDidMount = async () => {
     if (this.props.user.role !== ADMIN_USER) {
-      this.updateCalendars();
+      this.updateCalendars(this.props.user);
     }
     await this.props.getHolidays();
     this.fillMonth();
@@ -334,12 +305,12 @@ class Calendar extends Component {
    * @param {object} employee Represents the actual employee. If not given,
    * the app uses state's calendarEmployee
    */
-  updateCalendars = async (employee = this.state.calendarEmployee) => {
-    /*this.setState({
+  updateCalendars = async (employee) => {
+    this.setState({
       empCalendarsRegistered: null
-    });*/
+    });
     if (employee !== null) {
-      await this.props.getEmpCalendars(this.props.user.sapId);
+      await this.props.getEmpCalendars(employee.sapId);
       const empCalendar = this.props.empCalendars;
       const registeredCalendars = [];
       const date = new Date();
@@ -410,34 +381,35 @@ class Calendar extends Component {
         month: this.state.selectedMonth,
         days: days
       };
-      
-      await postEmpCalendar(calendarPayload);
+      await this.props.postEmpCalendar(calendarPayload);
+      this.setState({
+        alertIsVisible: true
+      });
     } else {
       alert("You have to fill all days");
     }
   };
+  
+  toggleAlert = () => {
+    this.setState({
+      alertIsVisible: false
+    });
+  }
 
   render = () => {
-    let alerts;
-    if (this.state.alerts) {
-      if (this.state.typeAlert === "success") {
-        alerts = (
-          <Alert color="success"> Shift calendar saved successfully! </Alert>
-        );
-      } else if (this.state.typeAlert === "error") {
-        alerts = (
-          <Alert color="danger">
-            {" "}
-            Error trying to save your calendar, please try again!{" "}
+    let alert;
+    if (this.state.alertIsVisible) {
+      let color = this.props.status.code === 'ok' ? 'success' : 'error';
+      alert = (
+          <Alert 
+            color={color}
+            isOpen={this.state.alertIsVisible} 
+            toggle={this.toggleAlert}
+          >
+            {this.props.status.message}
           </Alert>
         );
-      } else if (this.state.typeAlert === "warning") {
-        alerts = (
-          <Alert color="warning"> Warning, we cannot connect to Server! </Alert>
-        );
-      }
     }
-
     return (
       <div className="calendar-container">
         <Row>
@@ -467,6 +439,8 @@ class Calendar extends Component {
               selectYear={this.selectYear}
               user={this.state.calendarEmployee}
             />
+            
+            {alert}
 
             <Row className="calendar-month-container">
               <Col sm="12">
@@ -518,9 +492,6 @@ class Calendar extends Component {
         ) : (
           <React.Fragment />
         )}
-
-        <br />
-        {alerts}
       </div>
     );
   };
@@ -561,14 +532,12 @@ const mapStateToProps = state => {
       });
     }
   }
-  if (calendarData.status && calendarData.status.code === 'ok') {
-    console.log(calendarData.status.message);
-  }
   return {
     holidays: holidaysObj,
     empCalendars: empCalendars ? empCalendars : {},
     loading: calendarData.loading,
-    user: state.user
+    user: state.user,
+    status: calendarData.status
   };
 };
 

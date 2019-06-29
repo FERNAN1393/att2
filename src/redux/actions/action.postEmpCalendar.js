@@ -48,7 +48,7 @@ export const postEmpCalendar = calendar => async dispatch => {
         if (response) {
             dispatch(postEmpCalendarsSuccess());
         } else {
-            dispatch(postEmpCalendarsSuccess());
+            dispatch(postEmpCalendarsError('Something went wrong'));
         }
     } catch (e) {
         dispatch(postEmpCalendarsError(e));
