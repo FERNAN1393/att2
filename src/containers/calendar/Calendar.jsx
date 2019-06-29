@@ -6,7 +6,7 @@ import React, { Component } from "react";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from "prop-types";
-import { Alert, Button, Row, Col } from "reactstrap";
+import { UncontrolledAlert as Alert, Button, Row, Col } from "reactstrap";
 //Attendance jsx files
 import CalendarAdminControlPanel from "../../components/calendar/CalendarAdminControlPanel";
 import CalendarUserPanel from "../../components/calendar/CalendarUserPanel";
@@ -39,11 +39,8 @@ class Calendar extends Component {
       isEditableMonth: false,
       selectedMonth: new Date().getMonth(), //Actual month
       selectedYear: new Date().getFullYear(),
-      alerts: false,
       typeAlert: "",
-      modalAppear: false,
-      uploading: false,
-      alertIsVisible: false
+      modalAppear: false
     };
   }
 
@@ -382,29 +379,18 @@ class Calendar extends Component {
         days: days
       };
       await this.props.postEmpCalendar(calendarPayload);
-      this.setState({
-        alertIsVisible: true
-      });
     } else {
       alert("You have to fill all days");
     }
   };
-  
-  toggleAlert = () => {
-    this.setState({
-      alertIsVisible: false
-    });
-  }
 
   render = () => {
     let alert;
-    if (this.state.alertIsVisible) {
+    if (this.props.status) {
       let color = this.props.status.code === 'ok' ? 'success' : 'error';
       alert = (
           <Alert 
             color={color}
-            isOpen={this.state.alertIsVisible} 
-            toggle={this.toggleAlert}
           >
             {this.props.status.message}
           </Alert>
@@ -472,13 +458,11 @@ class Calendar extends Component {
           <React.Fragment />
         )}
 
-        {this.state.uploading || this.props.loading ? (
+        {this.props.loading ? (
           <PopUpLoading
             className="uploading-modal"
-            isOpen={this.state.uploading || this.props.loading}
-            modalTitle={`${
-              this.props.loading ? "Loading" : "Submitting"
-            } calendar`}
+            isOpen={this.props.loading}
+            modalTitle={`Loading calendar`}
           >
             <div className="calendar-loading">
               <img
