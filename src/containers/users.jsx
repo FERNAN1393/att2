@@ -3,15 +3,19 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import Error from './Error';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
-class _Security extends Component {
-  constructor(props) {
-    super(props);
+ const mapStateToProps = (state, props) => {
+    return {users : state.users}
+}
 
-    this.state = {
+class _Security extends Component {
+
+
+    state = {
       users: [],
       sapID: '',
       rowIndex: '',
@@ -60,16 +64,7 @@ class _Security extends Component {
       },
       ]
     };
-    
-    this.onAdmin = this.onAdmin.bind(this);
-    this.onDelete = this.onDelete.bind(this);
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.openModalDelete = this.openModalDelete.bind(this);
-    this.toggle = this.toggle.bind(this);
-    this.select = this.select.bind(this);
 
-  }
    
    componentWillMount() {
       axios.get("http://www.react-lalovar.c9users.io/getUsers")
@@ -87,45 +82,13 @@ class _Security extends Component {
       });
    }
   
-   
-   openModal() {
-    this.setState({modalIsOpen: true});
-    console.log('Modal SapId');
-   }
-   
-   openModalDelete() {
-     this.setState({modalDelete: true});
-    console.log('Modal SapId');
-   }
-   
-   closeModal() {
-    this.setState({modalIsOpen: false, modalDelete: false});
-   }
-   
-   onTodoChange(value){
-        this.setState({
-             sapID: value
-        });
-   }
-    
-   toggle() {
-    this.setState(prevState => ({
-      dropdownOpen: !prevState.dropdownOpen
-    }));
-   }
-   
-   handleChange = (selectedOption) => {
-    this.setState({ selectedOption });
-    console.log(`Option selected:`, selectedOption);
-   }
-  
-   select(event) {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen,
-      rol: event.target.innerText
-    });
-   }
-   
+   openModal=() => this.setState({ modalIsOpen: true });
+   openModalDelete = () => this.setState({ modalDelete: true });
+   closeModal=()=> this.setState({ modalIsOpen: false, modalDelete: false });
+   onTodoChange=(sapID)=>this.setState({sapID});
+   toggle = () => this.setState(prevState => ({dropdownOpen: !prevState.dropdownOpen }));
+   handleChange = (selectedOption) => this.setState({ selectedOption });
+   select = ({ target:{ innerText: rol }}) => this.setState({ dropdownOpen: !this.state.dropdownOpen, rol });
    
 
    onAdmin = (e,row) =>  {
@@ -332,4 +295,4 @@ class _Security extends Component {
   }
  }
 
-export const Security = _Security;
+export const Security = connect(mapStateToProps)(_Security);

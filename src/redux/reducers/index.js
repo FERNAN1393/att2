@@ -4,9 +4,11 @@
 
 import { combineReducers  } from 'redux';
 import forgotPassReducer from './reducer.forgotPass';
-import { userReducer } from './reducer.user';
+import { userReducer, usersReducer } from './reducer.user';
+
 
 export const rootReducer = combineReducers({
   forgotPassReducer,
-  user: userReducer
+  user: userReducer, 
+  users: usersReducer
 });
