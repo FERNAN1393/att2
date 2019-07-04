@@ -14,7 +14,6 @@
     float: left;
     font-size: 16px;
     min-height: calc(100vh - 40px);
-    height: calc(100vh - 40px);
 }
 
 .attendance-template-sidebar .nav-link {
@@ -42,7 +41,8 @@
 /****************************Main**********************************************/
 main {
     float: right;
-    padding: 50px 5% 20px 5% !important;
+    padding: 3% 5% 0 5% !important;
+    overflow-y: auto;
 }
 
 /****************************Media rules***************************************/

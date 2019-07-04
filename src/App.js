@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 
 import AttendanceTemplate from './components/attendance_template/AttendanceTemplate';
 import Calendar from './containers/calendar/Calendar';
+import Holiday from './containers/holiday/Holiday';
 
 const mapStateToProps = ({user}) => ({user});
 
@@ -38,6 +39,11 @@ class _App extends React.Component{
                 exact 
                 path="/calendar" 
                 component={Calendar}
+              />
+              <Route 
+                exact 
+                path="/holidays" 
+                component={Holiday}
               />
             </AttendanceTemplate>
          

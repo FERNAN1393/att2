@@ -126,7 +126,7 @@ class CalendarUserPanel extends Component {
       }
     }
     this.setState({
-      registeredCalendars: registeredCalendars.sort((calendar1, calendar2) => calendar1.month < calendar2.month),
+      registeredCalendars: registeredCalendars.sort((calendar1, calendar2) => calendar1.month > calendar2.month),
       registeredYears: registeredYears
     });
   };

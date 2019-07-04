@@ -13,9 +13,10 @@ import {HOLIDAY_COLLECTION} from "../constants/Collections.js"
 export function CreateShiftHoliday (holiday) {
   const db = firebase.firestore();
   const fraterHoliday = db.collection(HOLIDAY_COLLECTION);
-  return fraterHoliday.doc(holiday.holidayDate.replace("/", "-")).set(holiday).then(function() {
+  return fraterHoliday.doc(holiday.holidayDate.split('/').join('-')).set(holiday).then(function(holiday) {
     return true;
   }).catch(err =>{
+    console.log(err);
     throw err;
   });
 }
@@ -68,7 +69,7 @@ export function SelectHolidaysByDate(date) {
 export function DeleteHoliday(date) {
   const db = firebase.firestore();
   const fraterHoliday = db.collection(HOLIDAY_COLLECTION);
-  return fraterHoliday.doc(date.replace("/", "-")).delete().then(function() {
+  return fraterHoliday.doc(date).delete().then(function() {
     return true;
   }).catch(err =>{
       throw err;

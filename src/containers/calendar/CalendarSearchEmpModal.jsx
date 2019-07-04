@@ -20,7 +20,7 @@ import {
 //Redux actions
 import {getAllEmployees} from '../../redux/actions/action.getAllEmployees';
 //Attendance constants
-import { TOTAL_EMPS_PER_PAGE, GET_EMPLOYEES_URL } from "../../constants/util";
+import { TOTAL_EMPS_PER_PAGE } from "../../constants/util";
 
 import "../../resources/css/calendar/calendarSearchEmpModal.css";
 

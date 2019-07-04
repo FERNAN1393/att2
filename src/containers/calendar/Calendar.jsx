@@ -133,7 +133,6 @@ class Calendar extends Component {
           }
         }
       } else if (this.isHoliday(i + 1, month, year)) {
-        console.log('Is holiday', i+1, month, year);
         dayType = DAY_TYPE["HOLIDAY"];
       }
       monthCalendar.push(

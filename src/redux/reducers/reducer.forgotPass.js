@@ -10,7 +10,6 @@ import {
 
 
 export default function forgotPassReducer(state = {}, action) {
-    console.log("raulivan",action.type)
     switch (action.type) {
         case GETTING_REQUEST:
             state = {

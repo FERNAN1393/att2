@@ -36,7 +36,7 @@ const postEmpCalendarsError = error => ({
 });
 
 /*
-* @abstract Action that requests all employee calendars from database, 
+* @abstract Action that post a new employee's calendar to database, 
 * and dispatch actions depending on request state
 * @param {object} calendar An object that contains all the data regarding the 
 * employee's calendar that is going to be submitted to database.
