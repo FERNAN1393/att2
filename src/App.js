@@ -27,21 +27,13 @@ class _App extends React.Component{
       <div className="App">
         <div className="App__Form" >
           <Switch >
+       
             <Route path="/CreateAccount" render={(props) => <CreateAccount {...props} data={this.state} />}  />  
-            {!loggedUser &&  <Route path='/login' component={SignInForm}  /> }
-            {!loggedUser && <Redirect to='/login' /> }
-            <Redirect exact from='/login' to='/' /> 
-            <Route render={(props) => (            
-              <Switch {...props}>
-                <Route  exact  path="/" render={(props) => <AttendanceTemplate {...props} user={this.state.user} />} />
-              </Switch>
-            )}/> 
-            
             {!loggedUser && <Route path='/login' component={SignInForm}  /> }
             {!loggedUser && <Redirect to='/login' /> }
             
             <Redirect exact from="/login" to="/" /> 
-            
+              
             <AttendanceTemplate user={loggedUser}>
               <Route 
                 exact 
@@ -54,6 +46,7 @@ class _App extends React.Component{
                 component={Holiday}
               />
             </AttendanceTemplate>
+         
           </Switch>
         </div>
       </div>
