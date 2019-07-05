@@ -8,7 +8,7 @@
 
 /************Calendar**************/
 .calendar-container {
-  height: calc(90vh - 40px);
+  height: 90vh;
 }
 
 .calendar-title {

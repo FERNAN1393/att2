@@ -8,10 +8,7 @@ import {
   REQUEST_SAPID_ERROR
 } from './../../constants/reduxActions';
 
-const initialState = {
-    status: 'success'
-}
-export default function forgotPassReducer(state = initialState, action) {
+export default function forgotPassReducer(state = {}, action) {
     switch (action.type) {
         case GETTING_REQUEST:
             state = {

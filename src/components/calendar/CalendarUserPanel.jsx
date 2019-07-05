@@ -79,10 +79,15 @@ class CalendarUserPanel extends Component {
       monthDropDownOpen: !this.state.monthDropDownOpen
     });
   };
+  
+  isCalendarRegistered = (calendars, month, year) => {
+    return calendars.find(calendar => calendar.month === month && calendar.year === year);
+  };
 
   /**
    * @abstract Settles component's state with proper values, using props.
    * props' selectedMonth should be actual month always.
+   * Fill with user data, then with extra months (max two months ahead)
    */
   componentWillMount = () => {
     const { registeredCalendars, registeredYears } = this.getCalendarsObj();
@@ -90,38 +95,38 @@ class CalendarUserPanel extends Component {
       registeredYears.find(year => year === this.props.selectedYear) !==
       undefined;
     const currentMonth = this.props.selectedMonth;
-    // const registeredCalendars = registeredCalendars;
     if (currentMonth >= 10) {
       const nextYear = this.props.selectedYear + 1;
       const newYears = actualYearIsRegistered
         ? [this.props.selectedYear, nextYear]
         : [nextYear];
-      // const registeredCalendars = registeredCalendars;
-      if (currentMonth === 10) {
-        registeredCalendars.push({ month: 11, year: this.props.selectedYear });
-        registeredCalendars.push({ month: 0, year: nextYear });
-      }
-      if (currentMonth === 11) {
-        registeredCalendars.push({ month: 0, year: nextYear });
-        registeredCalendars.push({ month: 1, year: nextYear });
+      const nextMonths = currentMonth === 10  ? [11, 0] : [0, 1];
+      let nextYearRegistered = false;
+      if (!this.isCalendarRegistered(registeredCalendars, nextMonths[0], this.props.selectedYear)) {
+        registeredCalendars.push({ month: nextMonths[0], year: this.props.selectedYear }); 
         registeredYears.push([...newYears]);
+        nextYearRegistered = true;
+      }
+      if (!this.isCalendarRegistered(registeredCalendars, nextMonths[1], nextYear)) {
+        registeredCalendars.push({ month: nextMonths[1], year: nextYear });
+        if (!nextYearRegistered) {
+          registeredYears.push([...newYears]);
+        }
       }
     } else {
-      registeredCalendars.push({
-        month: this.props.selectedMonth + 1,
-        year: this.props.selectedYear
-      });
-      registeredCalendars.push({
-        month: this.props.selectedMonth + 2,
-        year: this.props.selectedYear
-      });
+      const nextMonths = [currentMonth + 1, currentMonth + 2];
+      if (!this.isCalendarRegistered(registeredCalendars, nextMonths[0], this.props.selectedYear)) {
+        registeredCalendars.push({ month: nextMonths[0], year: this.props.selectedYear }); 
+      }
+      if (!this.isCalendarRegistered(registeredCalendars, nextMonths[1], this.props.selectedYear)) {
+        registeredCalendars.push({ month: nextMonths[1], year: this.props.selectedYear });
+      }
       if (!actualYearIsRegistered) {
         registeredYears.push(this.props.selectedYear);
       }
     }
-
     this.setState({
-      registeredCalendars: registeredCalendars,
+      registeredCalendars: registeredCalendars.sort((calendar1, calendar2) => calendar1.month > calendar2.month),
       registeredYears: registeredYears
     });
   };
