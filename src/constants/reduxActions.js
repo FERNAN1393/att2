@@ -7,6 +7,15 @@ export const GETTING_REQUEST        = "GETTING_REQUEST";
 export const REQUEST_SAPID_SUCCESS  = "REQUEST_SAPID_SUCCESS";
 export const REQUEST_SAPID_ERROR    = "REQUEST_SAPID_ERROR";
 export const USER_LOGGED = 'USER_LOGGED';
+<<<<<<< HEAD
+=======
+
+//  --------------------          CreateAccount      --------------------
+
+export const GETTING_REQUEST_CREATEACCOUNT  = "GETTING_REQUEST_CREATEACCOUNT";
+export const REQUEST_CREATEACCOUNT_SUCCESS  = "REQUEST_CREATEACCOUNT_SUCCESS";
+export const REQUEST_CREATEACCOUNT_ERROR    = "REQUEST_CREATEACCOUNT_ERROR";
+>>>>>>> 12ebf1caf4eaf1b806385f975382f10cbac3da95
 //  -------------------            Get holidays              -------------------
 export const GET_HOLIDAYS_REQUEST = 'GET_HOLIDAYS_REQUEST';
 export const GET_HOLIDAYS_SUCCESS = 'GET_HOLIDAYS_SUCCESS';
