@@ -1,12 +1,13 @@
+/**
+*   Description: Sign in component.
+**/
 import React, { Component } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { signInUser } from '../redux/actions/action.signIn';
 import { Error } from '../components';
-
-
+import ForgotPass from './ForgotPass';
 const mapDispatchToProps = (dispatch) => bindActionCreators({ signInUser}, dispatch);
 const mapStateToProps = (state, props) => (state);
 const styles ={
@@ -21,11 +22,15 @@ class _SignInForm extends Component {
       psw:'',
         redirect: false,
         user: {},
-        modal: false,
-        modalAppear : false
+        forgotPassModal: false
     }
     
-    toggle =()=>  this.setState({modal: !this.state.modal });
+    toggleForgotModal = () => {
+        this.setState(prevState => ({
+            forgotPassModal: !prevState.forgotPassModal
+        }));
+    }
+    
     handleChange =({target: {name, value }})=> this.setState({[name]: value});
     
     handleSubmit = async (e)=> {
@@ -43,23 +48,17 @@ class _SignInForm extends Component {
      const credentials = { email , psw };
      const { success, errorMessage } = await this.props.signInUser(credentials);
       if(success)
-        this.props.history.push('/'); //redirect to aplication home 
+        this.props.history.push('/calendar'); //redirect to aplication home 
        else
         this.setState ({ errorDescription: errorMessage }); 
     }
   
     render() {
-    const { errorDescription, modal, email, psw } =this.state;
+    const { errorDescription, email, psw } =this.state;
 
         return (
         <div>
-        <Modal isOpen={modal} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>Forgot Password</ModalHeader>
-          <ModalBody>
-          <h2>olvidaste tu contrase;a</h2>
-           {/* <ForgotPassword Fun={this.toggle} />*/}
-          </ModalBody >
-        </Modal>
+        <ForgotPass toggleFun={this.toggleForgotModal} isOpen={this.state.forgotPassModal}/>
             <div className="FormTitle">
                 <NavLink  to="/" activeClassName="FormTitle__Link--Active" className="FormTitle__Link" style={styles.noPadding}>Sign In.</NavLink>
             </div>
@@ -77,9 +76,9 @@ class _SignInForm extends Component {
                 <input type="password" id="password" className="FormField__Input" placeholder="Enter your password" name="psw" value={psw} onChange={this.handleChange} />
                 <br/>
                 <br/>
-                <Link to ="/CreateAccount">Don't you have an account? Create one.</Link>
+                <Link to="/CreateAccount">Don't you have an account? Create one.</Link>
                 <br/>
-                <a href="#" onClick={this.toggle}>Forgot password?</a>
+                <Link to="/Login" onClick={this.toggleForgotModal}>Forgot password?</Link>
               </div>
               <div className="FormField"> 
               <button className="FormField__Button mr-20 col-sm-5" onClick={this.handleSubmit}>Sign In</button>

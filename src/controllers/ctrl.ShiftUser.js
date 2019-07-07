@@ -2,25 +2,47 @@
 *   Description: Controller file, will provide ABC methods for Attendance users  
 **/
 import * as firebase from "firebase";
-import {USER_COLLECTION, SHIFT_USER_REMOVED, SHIFT_USER_ACTIVE} from "../constants/Collections.js"
-
+import {
+  USER_COLLECTION, 
+  SHIFT_USER_REMOVED, 
+  SHIFT_USER_ACTIVE
+} from "../constants/Collections.js";
 
 /* 
- * Description: This method will insert/update Attendance users
+ * Description: This method will insert Attendance users
  * input: user (obj) 
  * output: true/err 
  */
-export function CreateAttUser (user) {
-  const db = firebase.firestore();
-  const fraterUsers = db.collection(USER_COLLECTION);
-  return fraterUsers.doc(user.sapId).set({
-    user
-  }).then(function(user) {
+export const CreateAttUser = async(user) => {
+  try{
+    if (user.sapId === "")
+      throw new Error("Please fill all data fields");
+    const db = firebase.firestore();
+    const attUsers = db.collection(USER_COLLECTION);
+    const alreadyExist = await attUsers.where("sapId","==",user.sapId).get();
+    if(alreadyExist !== undefined && alreadyExist.docs.length > 0)
+        throw new Error("User already Exist");
+    return await attUsers.doc(user.sapId).set(user);
+  }catch(error){
+    throw error;
+  }
+};
+
+/* 
+ * Description: This method will update Attendance users
+ * input: user (obj) 
+ * output: true/err 
+ */
+export const UpdateUser = async(user) => {
+  try{
+    const db = firebase.firestore();
+    const attUsers = db.collection(USER_COLLECTION);
+    await attUsers.doc(user.sapId).set(user);
     return true;
-  }).catch(err =>{
-    throw err;
-  });
-}
+  }catch(error){
+    throw error;    
+  }
+};
 
 /* 
  * Description: This method will select all active users
@@ -29,8 +51,8 @@ export function CreateAttUser (user) {
  */
 export function ExtractAllUsers () {
   const db = firebase.firestore();
-  const fraterUsers = db.collection(USER_COLLECTION);
-  return fraterUsers.where("status","==",SHIFT_USER_ACTIVE).get().then(function(users) {
+  const attUsers = db.collection(USER_COLLECTION);
+  return attUsers.where("status","==",SHIFT_USER_ACTIVE).get().then(function(users) {
     let sUser = [];
       users.forEach((doc)=>{
         sUser.push(doc.data());  
@@ -66,8 +88,8 @@ export function ExtractUserBySapId (sapId) {
  */
 export function ExtractUserByEmail (email) {
   const db = firebase.firestore();
-  const fraterUsers = db.collection(USER_COLLECTION);
-  return fraterUsers.where("email","==",email).get().then(function(user) {
+  const attUsers = db.collection(USER_COLLECTION);
+  return attUsers.where("email","==",email).get().then(function(user) {
     let sUser = null;
     if(user !== undefined && user.docs.length > 0)
         sUser = user.docs[0].data();
@@ -84,8 +106,8 @@ export function ExtractUserByEmail (email) {
  */
 export function ExtractUserByBatchNumber (batchNumber) {
   const db = firebase.firestore();
-  const fraterUsers = db.collection(USER_COLLECTION);
-  return fraterUsers.where("batchNumber","==",batchNumber).get().then(function(user) {
+  const attUsers = db.collection(USER_COLLECTION);
+  return attUsers.where("batchNumber","==",batchNumber).get().then(function(user) {
     let sUser = null;
     if(user !== undefined && user.docs.length > 0)
         sUser = user.docs[0].data();
@@ -102,8 +124,8 @@ export function ExtractUserByBatchNumber (batchNumber) {
  */
 export function ExtractSapIdByBatchNumber (batchNumber) {
   const db = firebase.firestore();
-  const fraterUsers = db.collection(USER_COLLECTION);
-  return fraterUsers.where("batchNumber","==",batchNumber).get().then(function(user) {
+  const attUsers = db.collection(USER_COLLECTION);
+  return attUsers.where("batchNumber","==",batchNumber).get().then(function(user) {
     let sUser = null;
     if(user !== undefined && user.docs.length > 0)
         sUser = user.docs[0].data();
@@ -121,12 +143,12 @@ export function ExtractSapIdByBatchNumber (batchNumber) {
  */
 export async function DeleteShiftUser (sapId){
   const db = firebase.firestore();
-  const fraterUsers = db.collection(USER_COLLECTION);
+  const attUsers = db.collection(USER_COLLECTION);
   try{
     const storedUser = await ExtractUserBySapId(sapId);   
     if(storedUser !== null) {
       storedUser.status = SHIFT_USER_REMOVED
-      return fraterUsers.doc(sapId).set({
+      return attUsers.doc(sapId).set({
         storedUser     
       }).then(function(user) {
         return true;
@@ -146,12 +168,12 @@ export async function DeleteShiftUser (sapId){
  */
 export async function UpdateUserRole (sapId, role){
   const db = firebase.firestore();
-  const fraterUsers = db.collection(USER_COLLECTION);
+  const attUsers = db.collection(USER_COLLECTION);
   try{
     const storedUser = await ExtractUserBySapId(sapId);   
     if(storedUser !== null) {
       storedUser.role = role
-      return fraterUsers.doc(sapId).set({
+      return attUsers.doc(sapId).set({
         storedUser     
       }).then(function(user) {
         return true;

@@ -14,7 +14,7 @@ export function SignIn (email, pass) {
     let userLogged = null;
     if(user !== undefined && user.docs.length > 0){
         userLogged = {
-          name:  user.docs[0].data().employeeName,
+          employeeName:  user.docs[0].data().employeeName,
           sapId: user.docs[0].data().sapId,
           role: user.docs[0].data().role
         }

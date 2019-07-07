@@ -8,9 +8,7 @@ import {
   REQUEST_SAPID_ERROR
 } from './../../constants/reduxActions';
 
-
 export default function forgotPassReducer(state = {}, action) {
-    console.log("raulivan",action.type)
     switch (action.type) {
         case GETTING_REQUEST:
             state = {

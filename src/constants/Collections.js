@@ -19,13 +19,16 @@ export const ALLOWANCE_COLLECTION = "attendanceAllowance";
 export const REPORT_COLLECTION = "attendanceTimeReport";
 export const NS_COLLECTION = "attendanceNightShift";
 export const HOLIDAY_COLLECTION = "attendanceHolidays";
-export const NO_RESULT_FOUND = "N/A";
+
 
 /* Attendance user Status */
 export const SHIFT_USER_ACTIVE = "active";
 export const SHIFT_USER_REMOVED = "removed";
+export const NO_RESULT_FOUND = "N/A";
 
 
-
+/* Attendance role */
+export const ROLE_USER = "2";
+export const ROLE_ADMIN = "1";
 
 
