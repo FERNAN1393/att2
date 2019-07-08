@@ -2,12 +2,14 @@
 *   Description: Constants for Redux Actions
 **/
 
-//  --------------------            ForgotPass              --------------------
+//  --------------------            Users              --------------------
 export const GETTING_REQUEST        = "GETTING_REQUEST";
 export const REQUEST_SAPID_SUCCESS  = "REQUEST_SAPID_SUCCESS";
 export const REQUEST_SAPID_ERROR    = "REQUEST_SAPID_ERROR";
 export const USER_LOGGED = 'USER_LOGGED';
 export const USERS_FETCHED = 'USER_FETCHED';
+export const USERS_UPDATED = 'USERS_UPDATED';
+export const USERS_DELETED = 'USERS_DELETED';
 
 //  --------------------          CreateAccount      --------------------
 

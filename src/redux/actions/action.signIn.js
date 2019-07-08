@@ -8,12 +8,12 @@ export const signInUser = ({email, psw }) =>  async dispatch => {
         //const userLoggedInfo = user;
         const userLoggedInfo = await SignIn(email, psw);
         userLoggedInfo && dispatch({type: USER_LOGGED, user: userLoggedInfo });
-        return {success:true,errorMessage:  !userLoggedInfo && 'User invalid, email or password is incorrect!'};
+        return {success:true, errorMessage:  !userLoggedInfo && 'User invalid, email or password is incorrect!'};
     }catch(e){
-        console.log('Error');
         return {success:false, errorMessage: 'Verify your internet connection'};
     }
 };
+
 
 const user = {
   projectName: 'Attendance ',

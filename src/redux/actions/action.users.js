@@ -1,6 +1,6 @@
 
 import { SignIn }  from '../../controllers/ctrl.SignInForm';
-import { USERS_FETCHED } from './../../constants/reduxActions';
+import { USERS_FETCHED, USERS_UPDATED, USERS_DELETED  } from './../../constants/reduxActions';
 const dataUsers= 
 [
    {
@@ -245,7 +245,7 @@ const dataUsers=
 
 
 /*
-Params: User : { }
+Params: na
 */
 export const getUsers = () =>   dispatch => {
     dispatch({type: USERS_FETCHED, users:dataUsers  });
@@ -253,4 +253,18 @@ export const getUsers = () =>   dispatch => {
 
 };
 
+/*
+Params: UserToUpdate : { }
+*/
+export const updateUser = (user) =>   dispatch => {
+    dispatch({type: USERS_UPDATED, users: [user]  });
+    return { succes : true };
+
+};
+
+export const deleteUser = (user) =>   dispatch => {
+    dispatch({type: USERS_DELETED, users: [user]  });
+    return { succes : true };
+
+};
   

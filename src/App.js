@@ -6,7 +6,7 @@ import * as firebase from "firebase";
 import { Route, Switch, Redirect } from 'react-router-dom';
 //import Admin from "firebase-admin";
 import { FirebaseCon } from "./constants/Collections";
-import { SignInForm } from './containers';
+import { SignInForm, Employees } from './containers';
 import  CreateAccount  from './containers/CreateAccount';
 import { connect } from 'react-redux';
 import AttendanceTemplate from './components/attendance_template/AttendanceTemplate';
@@ -44,6 +44,11 @@ class _App extends React.Component{
                 exact 
                 path="/holidays" 
                 component={Holiday}
+              />
+            <Route 
+                exact 
+                path="/employees" 
+                component={Employees}
               />
             </AttendanceTemplate>
          
